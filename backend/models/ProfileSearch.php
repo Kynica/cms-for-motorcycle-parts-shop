@@ -6,12 +6,15 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Profile;
+use yii\db\ActiveQuery;
 
 /**
  * ProfileSearch represents the model behind the search form about `common\models\Profile`.
  */
 class ProfileSearch extends Profile
 {
+    public $login;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +22,7 @@ class ProfileSearch extends Profile
     {
         return [
             [['id', 'user_id'], 'integer'],
-            [['name', 'surname', 'patronymic'], 'safe'],
+            [['name', 'surname', 'patronymic', 'login'], 'safe'],
         ];
     }
 
@@ -66,6 +69,16 @@ class ProfileSearch extends Profile
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'surname', $this->surname])
             ->andFilterWhere(['like', 'patronymic', $this->patronymic]);
+
+        if (! empty($this->login)) {
+            $login = $this->login;
+            $query->joinWith([
+                'user' => function ($q) use ($login) {
+                    /** @var $q ActiveQuery */
+                    $q->andFilterWhere(['like', 'username', $login]);
+                }
+            ]);
+        }
 
         return $dataProvider;
     }
