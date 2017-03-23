@@ -60,4 +60,9 @@ class Profile extends ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getLogin()
+    {
+        return $this->user->username;
+    }
 }
