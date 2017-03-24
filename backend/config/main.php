@@ -43,6 +43,13 @@ return [
             'rules' => [
             ],
         ],
+        'i18n' => [
+            'translations' => [
+                'product' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];
