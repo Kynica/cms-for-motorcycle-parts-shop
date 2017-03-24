@@ -68,8 +68,15 @@ class ProductSearch extends Product
             'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'sku', $this->sku])
-            ->andFilterWhere(['like', 'name', $this->name]);
+        if (! empty($this->name) && $this->name != '') {
+            $nameParts = explode(' ', $this->name);
+
+            foreach ($nameParts as $part) {
+                $query->andFilterWhere(['like', 'name', $part]);
+            }
+        }
+
+        $query->andFilterWhere(['like', 'sku', $this->sku]);
 
         return $dataProvider;
     }
