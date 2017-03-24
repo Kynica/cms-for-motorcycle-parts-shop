@@ -51,6 +51,7 @@ class Product extends ActiveRecord
             [['price', 'old_price', 'purchase_price'], 'number'],
             [['price', 'old_price', 'purchase_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],
+            ['sku', 'default', 'value' => NULL]
         ];
     }
 
