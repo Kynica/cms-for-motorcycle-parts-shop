@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Profile;
 use backend\models\ProfileSearch;
+use backend\models\UserForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,15 +64,25 @@ class ProfileController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Profile();
+        $model              = new Profile();
+        $userForm           = new UserForm();
+        $userForm->scenario = UserForm::SCENARIO_CREATE;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+            $userForm->load(Yii::$app->request->post());
+            $user = $userForm->create(); //TODO Rewrite - Profile must create user, not user form.
+            if (! empty($user)) {
+                $model->user_id = $user->id;
+                if ($model->save())
+                    return $this->redirect(['update', 'id' => $model->id]);
+            }
         }
+
+        return $this->render('create', [
+            'model'    => $model,
+            'userForm' => $userForm
+        ]);
     }
 
     /**
@@ -82,15 +93,23 @@ class ProfileController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model    = $this->findModel($id);
+        $userForm = new UserForm([
+            'username' => $model->user->username,
+            'email' => $model->user->email,
+        ]);
+        $userForm->scenario = UserForm::SCENARIO_UPDATE;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+        $model->load(Yii::$app->request->post());
+        $model->save();
+
+        $userForm->load(Yii::$app->request->post());
+        $userForm->update($model->user);
+
+        return $this->render('update', [
+            'model'    => $model,
+            'userForm' => $userForm,
+        ]);
     }
 
     /**

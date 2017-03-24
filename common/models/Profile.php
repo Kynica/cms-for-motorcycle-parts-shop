@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
 
 /**
@@ -64,5 +65,24 @@ class Profile extends ActiveRecord
     public function getLogin()
     {
         return $this->user->username;
+    }
+
+    public function beforeDelete()
+    {
+        if (Yii::$app->user->getId() == $this->user->id)
+            return false;
+
+        return true;
+    }
+
+    public function afterDelete()
+    {
+        if (! parent::afterDelete())
+            return false;
+
+        if (! $this->user->delete())
+            throw new Exception('Some error. Can\'t delete User');
+
+        return true;
     }
 }
