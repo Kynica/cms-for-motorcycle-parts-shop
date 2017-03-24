@@ -29,9 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'price',
             'old_price',
-            // 'purchase_price',
-            // 'created_at',
-            // 'updated_at',
+            'purchase_price',
 
             [
                 'class'    => 'yii\grid\ActionColumn',
