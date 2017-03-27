@@ -10,18 +10,30 @@ class m170327_123028_create_currency_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function safeUp()
     {
-        $this->createTable('currency', [
-            'id' => $this->primaryKey(),
-        ]);
+        $tableOptions = null;
+        if ($this->db->driverName === 'mysql') {
+            // http://stackoverflow.com/questions/766809/whats-the-difference-between-utf8-general-ci-and-utf8-unicode-ci
+            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
+        }
+
+        $this->createTable('{{%currency}}', [
+            'id'     => $this->primaryKey(),
+            'code'   => $this->string(25)->notNull(),
+            'name'   => $this->string(25)->notNull(),
+            'symbol' => $this->string(25)->notNull(),
+            'rate'   => $this->money(10,2)->notNull()->defaultValue(1)
+        ], $tableOptions);
+
+        $this->createIndex('idx-currency-code', '{{%currency}}', 'code');
     }
 
     /**
      * @inheritdoc
      */
-    public function down()
+    public function safeDown()
     {
-        $this->dropTable('currency');
+        $this->dropTable('{{%currency}}');
     }
 }
