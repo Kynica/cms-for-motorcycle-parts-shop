@@ -22,6 +22,7 @@ class m170324_135415_create_product_table extends Migration
             'id'             => $this->primaryKey(),
             'sku'            => $this->string(255),
             'name'           => $this->string(255)->notNull(),
+            'stock'          => "ENUM('in', 'out', 'await') NOT NULL DEFAULT 'in'",
             'price'          => $this->money(10,2)->notNull()->defaultValue(0.00),
             'old_price'      => $this->money(10,2)->notNull()->defaultValue(0.00),
             'purchase_price' => $this->money(10,2)->notNull()->defaultValue(0.00),
@@ -30,6 +31,7 @@ class m170324_135415_create_product_table extends Migration
         ], $tableOptions);
 
         $this->createIndex('idx-product-name',  '{{%product}}', 'name');
+        $this->createIndex('idx-product-stock', '{{%product}}', 'stock');
         $this->createIndex('idx-product-price', '{{%product}}', 'price');
     }
 
