@@ -2,7 +2,9 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 use common\models\Product;
+use common\models\Currency;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductSearch */
@@ -35,9 +37,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => Product::getStockVariation(),
             ],
             'name',
+            [
+                'attribute' => 'currency_id',
+                'content'   => function ($model) {
+                    /** @var common\models\Product $model */
+                    if (! empty($model->currency->code))
+                        return $model->currency->code;
+                    return null;
+                },
+                'filter'    => ArrayHelper::map(Currency::find()->all(), 'id', 'code')
+            ],
+            'purchase_price',
             'price',
             'old_price',
-            'purchase_price',
 
             [
                 'class'    => 'yii\grid\ActionColumn',

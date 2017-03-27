@@ -19,6 +19,9 @@ use yii\db\Expression;
  * @property string  $purchase_price
  * @property string  $created_at
  * @property string  $updated_at
+ * @property integer $currency_id
+ *
+ * @property Currency $currency
  */
 class Product extends ActiveRecord
 {
@@ -51,10 +54,10 @@ class Product extends ActiveRecord
             [['name'], 'required'],
             [['stock'], 'string'],
             [['stock'], 'default', 'value' => 'out'],
-            [['price', 'old_price', 'purchase_price'], 'number'],
+            [['price', 'old_price', 'purchase_price', 'currency_id'], 'number'],
             [['price', 'old_price', 'purchase_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],
-            ['sku', 'default', 'value' => NULL]
+            [['sku', 'currency_id'], 'default', 'value' => NULL]
         ];
     }
 
@@ -73,7 +76,16 @@ class Product extends ActiveRecord
             'purchase_price' => Yii::t('product', 'Purchase Price'),
             'created_at'     => Yii::t('product', 'Created At'),
             'updated_at'     => Yii::t('product', 'Updated At'),
+            'currency_id'    => Yii::t('product', 'Currency'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrency()
+    {
+        return $this->hasOne(Currency::className(), ['id' => 'currency_id']);
     }
 
     public static function getStockVariation($key = null)

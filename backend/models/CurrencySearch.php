@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Product;
+use common\models\Currency;
 
 /**
- * ProductSearch represents the model behind the search form about `common\models\Product`.
+ * CurrencySearch represents the model behind the search form about `common\models\Currency`.
  */
-class ProductSearch extends Product
+class CurrencySearch extends Currency
 {
     /**
      * @inheritdoc
@@ -18,9 +18,9 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'currency_id'], 'integer'],
-            [['sku', 'name', 'stock', 'created_at', 'updated_at', 'currency_id'], 'safe'],
-            [['price', 'old_price', 'purchase_price'], 'number'],
+            [['id'], 'integer'],
+            [['code', 'name', 'symbol'], 'safe'],
+            [['rate'], 'number'],
         ];
     }
 
@@ -42,7 +42,7 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find();
+        $query = Currency::find();
 
         // add conditions that should always apply here
 
@@ -60,25 +60,13 @@ class ProductSearch extends Product
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id'             => $this->id,
-            'stock'          => $this->stock,
-            'price'          => $this->price,
-            'old_price'      => $this->old_price,
-            'purchase_price' => $this->purchase_price,
-            'created_at'     => $this->created_at,
-            'updated_at'     => $this->updated_at,
-            'currency_id'    => $this->currency_id,
+            'id' => $this->id,
+            'rate' => $this->rate,
         ]);
 
-        if (! empty($this->name) && $this->name != '') {
-            $nameParts = explode(' ', $this->name);
-
-            foreach ($nameParts as $part) {
-                $query->andFilterWhere(['like', 'name', $part]);
-            }
-        }
-
-        $query->andFilterWhere(['like', 'sku', $this->sku]);
+        $query->andFilterWhere(['like', 'code', $this->code])
+            ->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'symbol', $this->symbol]);
 
         return $dataProvider;
     }
