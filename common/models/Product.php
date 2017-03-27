@@ -50,7 +50,7 @@ class Product extends ActiveRecord
         return [
             [['name'], 'required'],
             [['stock'], 'string'],
-            [['stock'], 'default', 'value' => 'in'],
+            [['stock'], 'default', 'value' => 'out'],
             [['price', 'old_price', 'purchase_price'], 'number'],
             [['price', 'old_price', 'purchase_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],

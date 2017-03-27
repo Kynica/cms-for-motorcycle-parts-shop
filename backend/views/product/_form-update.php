@@ -22,7 +22,9 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="row">
-        <div class="col-md-3 hidden-sm"></div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'stock')->dropDownList($model->getStockVariation()) ?>
+        </div>
         <div class="col-md-3">
             <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
         </div>
