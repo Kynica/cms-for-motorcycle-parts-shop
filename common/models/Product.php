@@ -78,6 +78,6 @@ class Product extends ActiveRecord
 
     public function getStockVariation()
     {
-        return ['in', 'out', 'await'];
+        return ['in' => 'In Stock', 'out' => 'Out of Stock', 'await' => 'Await'];
     }
 }
