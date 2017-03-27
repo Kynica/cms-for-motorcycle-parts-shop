@@ -19,7 +19,7 @@ class ProductSearch extends Product
     {
         return [
             [['id'], 'integer'],
-            [['sku', 'name', 'created_at', 'updated_at'], 'safe'],
+            [['sku', 'name', 'stock', 'created_at', 'updated_at'], 'safe'],
             [['price', 'old_price', 'purchase_price'], 'number'],
         ];
     }
@@ -60,12 +60,13 @@ class ProductSearch extends Product
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'price' => $this->price,
-            'old_price' => $this->old_price,
+            'id'             => $this->id,
+            'stock'          => $this->stock,
+            'price'          => $this->price,
+            'old_price'      => $this->old_price,
             'purchase_price' => $this->purchase_price,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at'     => $this->created_at,
+            'updated_at'     => $this->updated_at,
         ]);
 
         if (! empty($this->name) && $this->name != '') {
