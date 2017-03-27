@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Product;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductSearch */
@@ -25,6 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'sku',
+            [
+                'attribute' => 'stock',
+                'content'   => function ($model) {
+                    /** @var common\models\Product $model */
+                    return Product::getStockVariation($model->stock);
+                },
+                'filter'    => Product::getStockVariation(),
+            ],
             'name',
             'price',
             'old_price',

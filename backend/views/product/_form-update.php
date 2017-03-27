@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use common\models\Product;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
@@ -23,7 +24,7 @@ use yii\widgets\ActiveForm;
 
     <div class="row">
         <div class="col-md-3">
-            <?= $form->field($model, 'stock')->dropDownList($model->getStockVariation()) ?>
+            <?= $form->field($model, 'stock')->dropDownList(Product::getStockVariation()) ?>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
