@@ -75,4 +75,9 @@ class Product extends ActiveRecord
             'updated_at'     => Yii::t('product', 'Updated At'),
         ];
     }
+
+    public function getStockVariation()
+    {
+        return ['in', 'out', 'await'];
+    }
 }
