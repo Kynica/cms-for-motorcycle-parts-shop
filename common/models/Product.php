@@ -54,10 +54,10 @@ class Product extends ActiveRecord
             [['name'], 'required'],
             [['stock'], 'string'],
             [['stock'], 'default', 'value' => 'out'],
-            [['price', 'old_price', 'purchase_price'], 'number'],
+            [['price', 'old_price', 'purchase_price', 'currency_id'], 'number'],
             [['price', 'old_price', 'purchase_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],
-            ['sku', 'default', 'value' => NULL]
+            [['sku', 'currency_id'], 'default', 'value' => NULL]
         ];
     }
 
