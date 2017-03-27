@@ -41,7 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'currency_id',
                 'content'   => function ($model) {
                     /** @var common\models\Product $model */
-                    return $model->currency->code;
+                    if (! empty($model->currency->code))
+                        return $model->currency->code;
+                    return null;
                 },
                 'filter'    => ArrayHelper::map(Currency::find()->all(), 'id', 'code')
             ],
