@@ -78,6 +78,10 @@ class Product extends ActiveRecord
 
     public function getStockVariation()
     {
-        return ['in' => 'In Stock', 'out' => 'Out of Stock', 'await' => 'Await'];
+        return [
+            'in'    => Yii::t('product', 'In Stock'),
+            'out'   => Yii::t('product', 'Out of Stock'),
+            'await' => Yii::t('product', 'Await')
+        ];
     }
 }
