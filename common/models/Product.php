@@ -19,6 +19,9 @@ use yii\db\Expression;
  * @property string  $purchase_price
  * @property string  $created_at
  * @property string  $updated_at
+ * @property integer $currency_id
+ *
+ * @property Currency $currency
  */
 class Product extends ActiveRecord
 {
@@ -74,6 +77,14 @@ class Product extends ActiveRecord
             'created_at'     => Yii::t('product', 'Created At'),
             'updated_at'     => Yii::t('product', 'Updated At'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCurrency()
+    {
+        return $this->hasOne(Currency::className(), ['id' => 'currency_id']);
     }
 
     public static function getStockVariation($key = null)
