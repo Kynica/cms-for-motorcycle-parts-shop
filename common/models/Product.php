@@ -13,6 +13,7 @@ use yii\db\Expression;
  * @property integer $id
  * @property string  $sku
  * @property string  $name
+ * @property string  $stock
  * @property string  $price
  * @property string  $old_price
  * @property string  $purchase_price
@@ -48,6 +49,8 @@ class Product extends ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['stock'], 'string'],
+            [['stock'], 'default', 'value' => 'in'],
             [['price', 'old_price', 'purchase_price'], 'number'],
             [['price', 'old_price', 'purchase_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],
@@ -64,6 +67,7 @@ class Product extends ActiveRecord
             'id'             => Yii::t('product', 'ID'),
             'sku'            => Yii::t('product', 'Sku'),
             'name'           => Yii::t('product', 'Name'),
+            'stock'          => Yii::t('product', 'Stock'),
             'price'          => Yii::t('product', 'Price'),
             'old_price'      => Yii::t('product', 'Old Price'),
             'purchase_price' => Yii::t('product', 'Purchase Price'),
