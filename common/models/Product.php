@@ -76,6 +76,7 @@ class Product extends ActiveRecord
             'purchase_price' => Yii::t('product', 'Purchase Price'),
             'created_at'     => Yii::t('product', 'Created At'),
             'updated_at'     => Yii::t('product', 'Updated At'),
+            'currency_id'    => Yii::t('product', 'Currency'),
         ];
     }
 
