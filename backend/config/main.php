@@ -49,6 +49,9 @@ return [
                 'product' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                 ],
+                'currency' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
             ],
         ],
     ],
