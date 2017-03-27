@@ -2,7 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
 use common\models\Product;
+use common\models\Currency;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Product */
@@ -27,13 +29,16 @@ use common\models\Product;
             <?= $form->field($model, 'stock')->dropDownList(Product::getStockVariation()) ?>
         </div>
         <div class="col-md-3">
+            <?= $form->field($model, 'currency_id')->dropDownList(ArrayHelper::map(Currency::find()->all(), 'id', 'name')) ?>
+        </div>
+        <div class="col-md-2">
+            <?= $form->field($model, 'purchase_price')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-md-2">
             <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?= $form->field($model, 'old_price')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-md-3">
-            <?= $form->field($model, 'purchase_price')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
 
