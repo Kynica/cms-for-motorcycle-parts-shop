@@ -9,7 +9,8 @@ use yii\db\ActiveRecord;
  * This is the model class for table "category".
  *
  * @property integer $id
- * @property string $name
+ * @property string  $name
+ * @property integer $parent_id
  */
 class Category extends ActiveRecord
 {
@@ -28,7 +29,9 @@ class Category extends ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['parent_id'], 'integer'],
             [['name'], 'string', 'max' => 45],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['parent_id' => 'id']],
         ];
     }
 
@@ -40,6 +43,15 @@ class Category extends ActiveRecord
         return [
             'id'   => Yii::t('category', 'ID'),
             'name' => Yii::t('category', 'Name'),
+            'parent_id' => Yii::t('category', 'Parent ID'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'parent_id']);
     }
 }
