@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 
@@ -12,9 +13,14 @@ use yii\helpers\ArrayHelper;
  * @property integer $id
  * @property string  $name
  * @property integer $parent_id
+ *
+ * @property Category   $parent
+ * @property Category[] $parents
+ * @property Category[] $children
  */
 class Category extends ActiveRecord
 {
+    public $depth;
     /**
      * @inheritdoc
      */
@@ -30,8 +36,9 @@ class Category extends ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['parent_id'], 'integer'],
             [['name'], 'string', 'max' => 45],
+            [['parent_id'], 'integer'],
+            [['parent_id'], 'default', 'value' => null],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['parent_id' => 'id']],
         ];
     }
@@ -56,24 +63,54 @@ class Category extends ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'parent_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParents()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'ancestor'])
+            ->viaTable(CategoryClosure::tableName(), ['descendant' => 'id'])
+            ->select('{{%category}}.*, {{%category_closure}}.depth as depth')
+            ->leftJoin(CategoryClosure::tableName(), '{{%category_closure}}.ancestor = {{%category}}.id AND {{%category_closure}}.descendant = ' . $this->id)
+            ->orderBy('depth')
+            ->indexBy('depth');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildren()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'descendant'])
+            ->viaTable(CategoryClosure::tableName(), ['ancestor' => 'id'], function ($q) {
+                /** @var $q ActiveQuery */
+                $q->groupBy('descendant');
+                $q->orderBy('depth');
+            });
+    }
+
     public static function getTreeForSelect($ignoreCategoryId = null)
     {
         /** @var static[] $categories */
         $categories = static::find()->indexBy('id')->all();
 
-        foreach ($categories as $category) {
-            if ($category->parent_id === null) {
-                $category->parent_id = 0;
+        if (count($categories) > 0) {
+            foreach ($categories as $category) {
+                if ($category->parent_id === null) {
+                    $category->parent_id = 0;
+                }
             }
+
+            if (! empty($ignoreCategoryId)) {
+                unset($categories[ $ignoreCategoryId ]);
+            }
+
+            $categories = ArrayHelper::map($categories, 'id', 'name', 'parent_id');
+
+            return static::createTree($categories, $categories[0]);
+        } else {
+            return [];
         }
-
-        if (! empty($ignoreCategoryId)) {
-            unset($categories[ $ignoreCategoryId ]);
-        }
-
-        $categories = ArrayHelper::map($categories, 'id', 'name', 'parent_id');
-
-        return static::createTree($categories, $categories[0]);
     }
 
     protected static function createTree($allCategories, $currentCategories, &$tree = [], $depth = 0)
@@ -92,5 +129,25 @@ class Category extends ActiveRecord
         }
 
         return $tree;
+    }
+
+    public function getParentsNames()
+    {
+        $r = '';
+        foreach ($this->parents as $parent) {
+            $r .= $parent->name . ' > ';
+        }
+        return $r;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if (array_key_exists('parent_id', $changedAttributes)) {
+            CategoryClosure::updateFor($this);
+        }
+
+        return true;
     }
 }
