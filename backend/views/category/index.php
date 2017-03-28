@@ -25,6 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            [
+                'attribute' => 'Parents',
+                'content'   => function ($model) {
+                    /** @var $model \common\models\Category */
+                    return $model->getParentsNames();
+                }
+            ],
             'name',
 
             ['class' => 'yii\grid\ActionColumn'],
