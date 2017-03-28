@@ -19,9 +19,22 @@ class m170327_200419_create_category_table extends Migration
         }
 
         $this->createTable('{{%category}}', [
-            'id'   => $this->primaryKey(),
-            'name' => $this->string(45)->notNull()
+            'id'        => $this->primaryKey(),
+            'name'      => $this->string(45)->notNull(),
+            'parent_id' => $this->integer()
         ], $tableOptions);
+
+        $this->createIndex('idx-category-parent_id', '{{%category}}', 'parent_id');
+
+        $this->addForeignKey(
+            'fk-category-parent_id',
+            '{{%category}}',
+            'parent_id',
+            '{{%category}}',
+            'id',
+            'NO ACTION',
+            'NO ACTION'
+        );
     }
 
     /**
@@ -29,6 +42,8 @@ class m170327_200419_create_category_table extends Migration
      */
     public function safeDown()
     {
+        $this->dropForeignKey('fk-category-parent_id', '{{%category}}');
+
         $this->dropTable('{{%category}}');
     }
 }
