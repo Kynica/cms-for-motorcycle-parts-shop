@@ -17,6 +17,9 @@ use yii\helpers\ArrayHelper;
  * @property Category   $parent
  * @property Category[] $parents
  * @property Category[] $children
+ *
+ * @property Category[] $parentList
+ * @property CategoryClosure[] $categoryClosure
  */
 class Category extends ActiveRecord
 {
@@ -66,7 +69,7 @@ class Category extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getParents()
+    public function _getParents()
     {
         return $this->hasMany(Category::className(), ['id' => 'ancestor'])
             ->viaTable(CategoryClosure::tableName(), ['descendant' => 'id'])
@@ -74,6 +77,37 @@ class Category extends ActiveRecord
             ->leftJoin(CategoryClosure::tableName(), '{{%category_closure}}.ancestor = {{%category}}.id AND {{%category_closure}}.descendant = ' . $this->id)
             ->orderBy('depth')
             ->indexBy('depth');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParentList()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'ancestor'])
+            ->viaTable(CategoryClosure::tableName(), ['descendant' => 'id'])
+            ->indexBy('id');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategoryClosure()
+    {
+        return $this->hasMany(CategoryClosure::className(), ['descendant' => 'id'])
+            ->indexBy('depth');
+    }
+
+    public function getParents()
+    {
+        $parents = [];
+        if (! empty($this->parent_id)) {
+            foreach ($this->categoryClosure as $closure) {
+                $parents[ $closure->depth ] = $this->parentList[ $closure->ancestor ];
+            }
+        }
+
+        return $parents;
     }
 
     /**
