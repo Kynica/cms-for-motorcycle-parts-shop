@@ -65,7 +65,12 @@ use common\models\Category;
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-3">
+            <div class="form-group">
+                <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
+            </div>
+        </div>
+        <div class="col-md-9">
             <div class="form-group">
                 <?= FileInput::widget([
                     'name' => 'image',
@@ -82,10 +87,6 @@ use common\models\Category;
                 ]) ?>
             </div>
         </div>
-    </div>
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
