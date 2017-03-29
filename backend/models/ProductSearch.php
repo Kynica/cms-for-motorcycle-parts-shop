@@ -18,7 +18,7 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'currency_id'], 'integer'],
+            [['id', 'currency_id', 'category_id'], 'integer'],
             [['sku', 'name', 'stock', 'created_at', 'updated_at', 'currency_id'], 'safe'],
             [['price', 'old_price', 'purchase_price'], 'number'],
         ];
@@ -68,6 +68,7 @@ class ProductSearch extends Product
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at,
             'currency_id'    => $this->currency_id,
+            'category_id'    => $this->category_id,
         ]);
 
         if (! empty($this->name) && $this->name != '') {
