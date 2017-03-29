@@ -66,19 +66,21 @@ use common\models\Category;
 
     <div class="row">
         <div class="col-md-12">
-            <?= FileInput::widget([
-                'name' => 'image',
-                'options'=>[
-                    'multiple'=>true
-                ],
-                'pluginOptions' => [
-                    'uploadUrl' => Url::to(['/product/image-upload']),
-                    'uploadExtraData' => [
-                        'product_id'  => $model->id,
+            <div class="form-group">
+                <?= FileInput::widget([
+                    'name' => 'image',
+                    'options'=>[
+                        'multiple'=>true
                     ],
-                    'maxFileCount' => 100
-                ]
-            ]) ?>
+                    'pluginOptions' => [
+                        'uploadUrl' => Url::to(['/product/image-upload']),
+                        'uploadExtraData' => [
+                            'product_id'  => $model->id,
+                        ],
+                        'maxFileCount' => 100
+                    ]
+                ]) ?>
+            </div>
         </div>
     </div>
 
