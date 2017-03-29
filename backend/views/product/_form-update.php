@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use kartik\select2\Select2;
+use kartik\file\FileInput;
 use common\models\Product;
 use common\models\Currency;
 use common\models\Category;
@@ -47,7 +49,9 @@ use common\models\Category;
             ) ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'currency_id')->dropDownList(ArrayHelper::map(Currency::find()->all(), 'id', 'name')) ?>
+            <?= $form->field($model, 'currency_id')->dropDownList(
+                    ArrayHelper::map(Currency::find()->all(), 'id', 'name')
+            ) ?>
         </div>
         <div class="col-md-2">
             <?= $form->field($model, 'purchase_price')->textInput(['maxlength' => true]) ?>
@@ -57,6 +61,24 @@ use common\models\Category;
         </div>
         <div class="col-md-2">
             <?= $form->field($model, 'old_price')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <?= FileInput::widget([
+                'name' => 'image',
+                'options'=>[
+                    'multiple'=>true
+                ],
+                'pluginOptions' => [
+                    'uploadUrl' => Url::to(['/product/image-upload']),
+                    'uploadExtraData' => [
+                        'product_id'  => $model->id,
+                    ],
+                    'maxFileCount' => 100
+                ]
+            ]) ?>
         </div>
     </div>
 
