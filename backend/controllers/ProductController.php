@@ -94,6 +94,17 @@ class ProductController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionImageUpload()
+    {
+        $id      = (int) Yii::$app->request->post('product_id');
+        $product = Product::findOne($id);
+
+        if (empty($product))
+            throw new NotFoundHttpException('Can\'t find product with id - ' . $id);
+
+
+    }
+
     /**
      * Finds the Product model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
