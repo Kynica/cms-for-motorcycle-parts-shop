@@ -3,12 +3,16 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 use common\models\Product;
 use common\models\Currency;
+use common\models\Category;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\ProductSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this         yii\web\View
+ * @var $searchModel  backend\models\ProductSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
 $this->title = Yii::t('product', 'Products');
 $this->params['breadcrumbs'][] = $this->title;
@@ -28,6 +32,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'sku',
+            [
+                'attribute' => 'category_id',
+                'content'   => function ($model) {
+                    /** @var common\models\Product $model */
+                    return $model->getCategoryName();
+                },
+                'filter'    => Select2::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'category_id',
+                    'data' => Category::getTreeForSelect(),
+                    'options' => [
+                        'placeholder' => 'Select a category ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])
+            ],
             [
                 'attribute' => 'stock',
                 'content'   => function ($model) {
