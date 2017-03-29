@@ -63,7 +63,6 @@ class CategoryClosure extends ActiveRecord
         if (! empty($category->parent_id)) {
             /** @var Category $parentCategory */
             $parentCategory = Category::find()
-                ->with(['parents'])
                 ->where(['id' => $category->parent_id])
                 ->one();
 
