@@ -23,6 +23,7 @@ use yii\db\Expression;
  * @property integer $category_id
  *
  * @property Currency $currency
+ * @property Category $category
  */
 class Product extends ActiveRecord
 {
