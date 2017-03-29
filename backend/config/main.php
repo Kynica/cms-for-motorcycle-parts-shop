@@ -52,6 +52,9 @@ return [
                 'currency' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                 ],
+                'category' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
             ],
         ],
     ],
