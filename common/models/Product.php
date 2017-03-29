@@ -100,6 +100,13 @@ class Product extends ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
+    public function getCategoryName()
+    {
+        if (! empty($this->category))
+            return $this->category->name;
+        return NULL;
+    }
+
     public static function getStockVariation($key = null)
     {
         $variation = [
