@@ -54,7 +54,7 @@ class Page extends ActiveRecord
     public static function create($url, $controller, $entityId)
     {
         $page = new static([
-            'url'        => Inflector::slug($url),
+            'url'        => static::normalizeUrl($url),
             'controller' => $controller,
             'entity_id'  => $entityId
         ]);
@@ -73,11 +73,16 @@ class Page extends ActiveRecord
         if (empty($page))
             throw new Exception('Page not exist. Pls, create page before update it.');
 
-        $page->url = Inflector::slug($newUrl);
+        $page->url = static::normalizeUrl($newUrl);
 
         if (! $page->save())
             throw new Exception('Can\'t update page for ' . $controller . ' with entity id ' . $entityId);
 
         return;
+    }
+
+    public static function normalizeUrl($url)
+    {
+        return '/' . Inflector::slug('/' . $url);
     }
 }
