@@ -153,5 +153,7 @@ class Product extends ActiveRecord
         if (! empty($this->page))
             if (! $this->page->delete())
                 throw new Exception('Can\'t delete product page');
+
+        ProductImage::deleteAllFor($this);
     }
 }
