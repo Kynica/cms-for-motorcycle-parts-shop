@@ -3,7 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
+use yii\helpers\Inflector;
 
 /**
  * This is the model class for table "page".
@@ -47,5 +49,35 @@ class Page extends ActiveRecord
             'controller' => Yii::t('page', 'Controller'),
             'entity_id'  => Yii::t('page', 'Entity ID'),
         ];
+    }
+
+    public static function create($url, $controller, $entityId)
+    {
+        $page = new static([
+            'url'        => Inflector::slug($url),
+            'controller' => $controller,
+            'entity_id'  => $entityId
+        ]);
+
+        if (! $page->save())
+            throw new Exception('Can\'t save page for ' . $controller . ' with entity id ' . $entityId);
+
+        return;
+    }
+
+    public static function updateUrl($newUrl, $controller, $entityId)
+    {
+        /** @var static $page */
+        $page = static::find()->where(['controller' => $controller, 'entity_id' => $entityId])->one();
+
+        if (empty($page))
+            throw new Exception('Page not exist. Pls, create page before update it.');
+
+        $page->url = Inflector::slug($newUrl);
+
+        if (! $page->save())
+            throw new Exception('Can\'t update page for ' . $controller . ' with entity id ' . $entityId);
+
+        return;
     }
 }
