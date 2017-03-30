@@ -35,7 +35,7 @@ class m170323_142610_create_profile_table extends Migration
             'user_id',
             '{{%user}}',
             'id',
-            'NO ACTION',
+            'CASCADE',
             'NO ACTION'
         );
 

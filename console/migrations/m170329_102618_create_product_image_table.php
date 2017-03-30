@@ -33,7 +33,7 @@ class m170329_102618_create_product_image_table extends Migration
             'product_id',
             '{{%product}}',
             'id',
-            'CASCADE',
+            'NO ACTION',
             'NO ACTION'
         );
     }
