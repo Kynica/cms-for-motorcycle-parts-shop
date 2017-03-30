@@ -80,7 +80,7 @@ use common\models\ProductImage;
                     ],
                     'pluginOptions' => [
                         'uploadAsync' => false,
-                        'initialPreview' => ProductImage::getImages($model),
+                        'initialPreview' => ProductImage::getImages($model, 200, 200, 100, 'product-update-form'),
                         'initialPreviewAsData'=>true,
                         'initialCaption'=>"The Moon and the Earth",
                         'initialPreviewConfig' => ProductImage::getImagesData($model),
