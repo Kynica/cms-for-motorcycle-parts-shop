@@ -27,6 +27,8 @@ use yii\db\Expression;
  */
 class Product extends ActiveRecord
 {
+    const FRONTEND_CONTROLLER = 'product';
+
     /**
      * @inheritdoc
      */
@@ -120,5 +122,16 @@ class Product extends ActiveRecord
         }
 
         return $variation;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert)
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+
+        if (! $insert && array_key_exists('name', $changedAttributes))
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
     }
 }
