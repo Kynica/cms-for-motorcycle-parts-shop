@@ -20,8 +20,8 @@ class m170327_200419_create_category_table extends Migration
 
         $this->createTable('{{%category}}', [
             'id'        => $this->primaryKey(),
-            'name'      => $this->string(45)->notNull(),
-            'parent_id' => $this->integer()
+            'parent_id' => $this->integer(),
+            'name'      => $this->string(45)->notNull()
         ], $tableOptions);
 
         $this->createIndex('idx-category-parent_id', '{{%category}}', 'parent_id');
