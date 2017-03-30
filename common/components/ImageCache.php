@@ -16,8 +16,8 @@ class ImageCache
 
     protected static function toCache($scope, $imagePath, $width, $height, $quality)
     {
-        $fullCachePath  = static::getFullCachePath($scope);
-        $cacheImageName = static::getImageCacheName(static::getFromPath($imagePath, 'name'), $width, $height, $quality);
+        $fullCachePath  = static::getFullCachePath($scope, $width, $height, $quality);
+        $cacheImageName = static::getFromPath($imagePath, 'name');
 
         if (! file_exists($fullCachePath . '/' . $cacheImageName)) {
             $frontendPath = static::getImageFrontendPath($imagePath);
@@ -26,7 +26,7 @@ class ImageCache
                 ->thumbnail(new Box($width, $height))
                 ->save($fullCachePath . '/' . $cacheImageName, ['quality' => $quality]);
         }
-        return '/' . Yii::$app->params['imageCacheFolder'] . '/' . $scope . '/' . $cacheImageName;
+        return '/' . static::getCacheDir($scope, $width, $height, $quality) . '/' . $cacheImageName;
     }
 
     protected static function getFromPath($imagePath, $what = 'name')
@@ -41,9 +41,18 @@ class ImageCache
         }
     }
 
-    protected static function getFullCachePath($scope)
+    protected static function getCacheDir($scope, $width, $height, $quality)
     {
-        $cacheFolder = Yii::getAlias('@webroot') . '/' . Yii::$app->params['imageCacheFolder'] . '/' . $scope;
+        return Yii::$app->params['imageCacheFolder'] .
+            '/' .
+            $scope .
+            '/' .
+            $width . 'x' . $height . 'x' . $quality;
+    }
+
+    protected static function getFullCachePath($scope, $width, $height, $quality)
+    {
+        $cacheFolder = Yii::getAlias('@webroot') . '/' . static::getCacheDir($scope, $width, $height, $quality);
         if (! file_exists($cacheFolder)) {
             if (! mkdir($cacheFolder, 0755, true))
                 throw new Exception('Cant create cache folder');
@@ -51,9 +60,9 @@ class ImageCache
         return $cacheFolder;
     }
 
-    protected static function getImageCacheName($imageName, $width, $height, $quality)
+    protected static function getImageCacheName($imageName)
     {
-        return $width . 'x' . $height . 'x' . $quality . '-'. $imageName;
+        return $imageName;
     }
 
     protected static function getImageFrontendPath($imagePath)
