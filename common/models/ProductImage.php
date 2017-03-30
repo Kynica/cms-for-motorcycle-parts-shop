@@ -115,6 +115,22 @@ class ProductImage extends ActiveRecord
         }
     }
 
+    public static function getFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
+    {
+        static::loadImagesFor($product);
+
+        if (! empty(static::$images[ $product->id ][1])) {
+            $image = static::$images[ $product->id ][1];
+
+            return ImageCache::create(
+                ProductImage::getStorageFolder($product) . '/' . $image->path,
+                $width, $height, $quality, $scope
+            );
+        }
+
+        return null;
+    }
+
     public static function getImages(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
         static::loadImagesFor($product);
