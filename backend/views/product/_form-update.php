@@ -9,6 +9,7 @@ use kartik\file\FileInput;
 use common\models\Product;
 use common\models\Currency;
 use common\models\Category;
+use common\models\ProductImage;
 
 /**
  * @var $this yii\web\View
@@ -73,16 +74,21 @@ use common\models\Category;
         <div class="col-md-9">
             <div class="form-group">
                 <?= FileInput::widget([
-                    'name' => 'image',
+                    'name' => 'File[upload][]',
                     'options'=>[
                         'multiple'=>true
                     ],
                     'pluginOptions' => [
+                        'uploadAsync' => false,
+                        'initialPreview' => ProductImage::getImages($model),
+                        'initialPreviewAsData'=>true,
+                        'initialCaption'=>"The Moon and the Earth",
+                        'initialPreviewConfig' => ProductImage::getImagesData($model),
                         'uploadUrl' => Url::to(['/product/image-upload']),
                         'uploadExtraData' => [
                             'product_id'  => $model->id,
                         ],
-                        'maxFileCount' => 100
+                        'maxFileCount' => 20
                     ]
                 ]) ?>
             </div>
