@@ -105,7 +105,7 @@ class ProductImage extends ActiveRecord
         return;
     }
 
-    public function deleteAllFor(Product $product)
+    public static function deleteAllFor(Product $product)
     {
         /** @var static[] $images */
         $images = static::find()->where(['product_id' => $product->id])->all();
