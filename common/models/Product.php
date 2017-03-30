@@ -3,9 +3,10 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "product".
@@ -24,6 +25,7 @@ use yii\db\Expression;
  *
  * @property Currency $currency
  * @property Category $category
+ * @property Page     $page
  */
 class Product extends ActiveRecord
 {
@@ -142,5 +144,14 @@ class Product extends ActiveRecord
 
         if (! $insert && array_key_exists('name', $changedAttributes))
             Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        if (! empty($this->page))
+            if (! $this->page->delete())
+                throw new Exception('Can\'t delete product page');
     }
 }
