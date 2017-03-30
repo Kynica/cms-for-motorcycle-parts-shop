@@ -139,11 +139,16 @@ class Product extends ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
+        $categoryUrl = empty($this->category) ? '' : $this->category->getUrl();
+
         if ($insert)
-            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
 
         if (! $insert && array_key_exists('name', $changedAttributes))
-            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
+
+        if (! $insert && array_key_exists('category_id', $changedAttributes))
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
     }
 
     public function afterDelete()
