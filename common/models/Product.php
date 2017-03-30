@@ -102,6 +102,15 @@ class Product extends ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPage()
+    {
+        return $this->hasOne(Page::className(), ['entity_id' => 'id'])
+            ->andWhere(['controller' => static::FRONTEND_CONTROLLER]);
+    }
+
     public function getCategoryName()
     {
         if (! empty($this->category))
