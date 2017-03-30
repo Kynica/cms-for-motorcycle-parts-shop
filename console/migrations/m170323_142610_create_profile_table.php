@@ -62,6 +62,8 @@ class m170323_142610_create_profile_table extends Migration
     {
         $this->dropForeignKey('fk-profile-user_id', '{{%profile}}');
 
+        Yii::$app->db->createCommand()->truncateTable('{{%user}}');
+
         $this->dropTable('{{%profile}}');
     }
 }
