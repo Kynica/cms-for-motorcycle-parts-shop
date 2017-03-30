@@ -3,11 +3,13 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Product;
-use backend\models\ProductSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
+use backend\models\ProductSearch;
+use common\models\Product;
+use common\models\ProductImage;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -96,13 +98,26 @@ class ProductController extends Controller
 
     public function actionImageUpload()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         $id      = (int) Yii::$app->request->post('product_id');
         $product = Product::findOne($id);
 
         if (empty($product))
             throw new NotFoundHttpException('Can\'t find product with id - ' . $id);
 
+        ProductImage::uploadFor($product);
 
+        return [];
+    }
+
+    public function actionImageDelete($imageId)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        ProductImage::deleteOne($imageId);
+
+        return [];
     }
 
     /**
