@@ -51,10 +51,10 @@ class Page extends ActiveRecord
         ];
     }
 
-    public static function create($url, $controller, $entityId)
+    public static function create($url, $controller, $entityId, $prefix = '')
     {
         $page = new static([
-            'url'        => static::normalizeUrl($url),
+            'url'        => $prefix . static::normalizeUrl($url),
             'controller' => $controller,
             'entity_id'  => $entityId
         ]);
@@ -65,7 +65,7 @@ class Page extends ActiveRecord
         return;
     }
 
-    public static function updateUrl($newUrl, $controller, $entityId)
+    public static function updateUrl($newUrl, $controller, $entityId, $prefix = '')
     {
         /** @var static $page */
         $page = static::find()->where(['controller' => $controller, 'entity_id' => $entityId])->one();
@@ -73,7 +73,7 @@ class Page extends ActiveRecord
         if (empty($page))
             throw new Exception('Page not exist. Pls, create page before update it.');
 
-        $page->url = static::normalizeUrl($newUrl);
+        $page->url = $prefix . static::normalizeUrl($newUrl);
 
         if (! $page->save())
             throw new Exception('Can\'t update page for ' . $controller . ' with entity id ' . $entityId);
