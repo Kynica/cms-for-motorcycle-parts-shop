@@ -54,4 +54,10 @@ class File extends Model
         $fullFilePath = Yii::getAlias('@frontend') . '/web' . $filePath;
         return unlink($fullFilePath);
     }
+
+    public static function deleteFolder($path)
+    {
+        $fullFilePath = Yii::getAlias('@frontend') . '/web' . $path;
+        FileHelper::removeDirectory($fullFilePath);
+    }
 }
