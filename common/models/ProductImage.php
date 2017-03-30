@@ -116,7 +116,31 @@ class ProductImage extends ActiveRecord
         }
     }
 
-    public static function getFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
+    public static function getImage(Product $product)
+    {
+        static::loadImagesFor($product);
+
+        if (! empty(static::$images[ $product->id ][1])) {
+            $image = static::$images[ $product->id ][1];
+
+            return ProductImage::getStorageFolder($product) . '/' . $image->path;
+        }
+
+        return null;
+    }
+
+    public static function getImages(Product $product)
+    {
+        static::loadImagesFor($product);
+
+        $images = [];
+        foreach (static::$images[ $product->id ] as $image) {
+            $images[] = ProductImage::getStorageFolder($product) . '/' . $image->path;
+        }
+        return $images;
+    }
+
+    public static function getImageFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
         static::loadImagesFor($product);
 
@@ -132,7 +156,7 @@ class ProductImage extends ActiveRecord
         return null;
     }
 
-    public static function getImages(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
+    public static function getImagesFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
         static::loadImagesFor($product);
 

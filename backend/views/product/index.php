@@ -62,8 +62,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'image',
                 'content'   => function ($model) {
-                    if (! empty(ProductImage::getFromCache($model, 120, 120, 100, 'product-index'))) {
-                        return Html::img(ProductImage::getFromCache($model, 120, 120, 100, 'product-index'));
+                    if (! empty(ProductImage::getImageFromCache($model, 120, 120, 100, 'product-index'))) {
+                        return Html::img(ProductImage::getImageFromCache($model, 120, 120, 100, 'product-index'));
                     }
                     return null;
                 }
