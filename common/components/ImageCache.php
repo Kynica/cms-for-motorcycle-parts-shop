@@ -67,6 +67,6 @@ class ImageCache
 
     protected static function getImageFrontendPath($imagePath)
     {
-        return Yii::getAlias('@frontend') . '/web/' . $imagePath;
+        return Yii::getAlias('@frontend') . '/web' . $imagePath;
     }
 }
