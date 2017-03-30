@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use common\components\ImageCache;
 
 /**
  * This is the model class for table "product_image".
@@ -114,13 +115,16 @@ class ProductImage extends ActiveRecord
         }
     }
 
-    public static function getImages(Product $product)
+    public static function getImages(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
         static::loadImagesFor($product);
 
         $images = [];
         foreach (static::$images[ $product->id ] as $image) {
-            $images[] = 'http://cms-for-motorcycle-parts-shop.loc' . $image->path;
+            $images[] = ImageCache::create(
+                ProductImage::getStorageFolder($product) . '/' . $image->path,
+                $width, $height, $quality, $scope
+            );
         }
         return $images;
     }
