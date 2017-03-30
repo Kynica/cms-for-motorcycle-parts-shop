@@ -18,12 +18,17 @@ use yii\helpers\ArrayHelper;
  * @property Category[] $parents
  * @property Category[] $children
  *
- * @property Category[] $parentList
+ * @property Category[]        $parentList
  * @property CategoryClosure[] $categoryClosure
+ *
+ * @property Page $page
  */
 class Category extends ActiveRecord
 {
+    const FRONTEND_CONTROLLER = 'category';
+
     public $depth;
+
     /**
      * @inheritdoc
      */
@@ -123,6 +128,15 @@ class Category extends ActiveRecord
             });
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPage()
+    {
+        return $this->hasOne(Page::className(), ['entity_id' => 'id'])
+            ->andWhere(['controller' => static::FRONTEND_CONTROLLER]);
+    }
+
     public static function getTreeForSelect($ignoreCategoryId = null)
     {
         /** @var static[] $categories */
@@ -181,6 +195,12 @@ class Category extends ActiveRecord
         if (array_key_exists('parent_id', $changedAttributes)) {
             CategoryClosure::updateFor($this);
         }
+
+        if ($insert)
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+
+        if (! $insert && array_key_exists('name', $changedAttributes))
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
 
         return true;
     }
