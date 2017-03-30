@@ -24,7 +24,7 @@ class File extends Model
 
     public static function uploadImages($filePath, $newName = null)
     {
-        $fullPath          = Yii::getAlias('@frontend') . '/web/' . $filePath;
+        $fullPath          = Yii::getAlias('@frontend') . '/web' . $filePath;
         if (! FileHelper::createDirectory($fullPath))
             throw new Exception('Can\'t create folder "' . $fullPath . '" for image');
         $newFile           = new static();
