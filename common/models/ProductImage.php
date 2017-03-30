@@ -66,7 +66,7 @@ class ProductImage extends ActiveRecord
 
     public static function getStorageFolder(Product $product)
     {
-        return Yii::$app->params['uploadDir'] . '/' . 'product' . '/' . $product->id;
+        return '/' . Yii::$app->params['uploadDir'] . '/' . 'product' . '/' . $product->id;
     }
 
     public static function uploadFor(Product $product)
@@ -92,8 +92,9 @@ class ProductImage extends ActiveRecord
     public static function deleteOne($id)
     {
         $image = static::findOne($id);
-        if ($image->delete()) {
-            File::delete($image->path);
+        $product = Product::findOne($image->product_id);
+        if (! empty($product) && $image->delete()) {
+            File::delete($image->getStorageFolder($product) . '/' .$image->path);
             Yii::$app->db->createCommand()
                 ->update(
                     static::tableName(),
