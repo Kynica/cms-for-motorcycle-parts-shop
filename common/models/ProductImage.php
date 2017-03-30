@@ -105,6 +105,20 @@ class ProductImage extends ActiveRecord
         return;
     }
 
+    public static function deleteAllFor(Product $product)
+    {
+        /** @var static[] $images */
+        $images = static::find()->where(['product_id' => $product->id])->all();
+        foreach ($images as $image) {
+            if (! $image->delete())
+                throw new Exception('Can\'t delete image from database where product id is' . $product->id);
+
+            if (File::delete($image->getStorageFolder($product) . '/' .$image->path))
+                throw new Exception('Can\'t delete product image where product id is ' . $product->id);
+        }
+        return;
+    }
+
     public static function loadImagesFor(Product $product)
     {
         if (! array_key_exists($product->id, static::$images)) {

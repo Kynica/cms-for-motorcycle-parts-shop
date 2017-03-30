@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -18,12 +19,17 @@ use yii\helpers\ArrayHelper;
  * @property Category[] $parents
  * @property Category[] $children
  *
- * @property Category[] $parentList
+ * @property Category[]        $parentList
  * @property CategoryClosure[] $categoryClosure
+ *
+ * @property Page $page
  */
 class Category extends ActiveRecord
 {
+    const FRONTEND_CONTROLLER = 'category';
+
     public $depth;
+
     /**
      * @inheritdoc
      */
@@ -123,6 +129,15 @@ class Category extends ActiveRecord
             });
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPage()
+    {
+        return $this->hasOne(Page::className(), ['entity_id' => 'id'])
+            ->andWhere(['controller' => static::FRONTEND_CONTROLLER]);
+    }
+
     public static function getTreeForSelect($ignoreCategoryId = null)
     {
         /** @var static[] $categories */
@@ -182,6 +197,21 @@ class Category extends ActiveRecord
             CategoryClosure::updateFor($this);
         }
 
+        if ($insert)
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+
+        if (! $insert && array_key_exists('name', $changedAttributes))
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
+
         return true;
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        if (! empty($this->page))
+            if (! $this->page->delete())
+                throw new Exception('Can\'t delete category page');
     }
 }

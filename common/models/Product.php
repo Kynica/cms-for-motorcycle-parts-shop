@@ -3,9 +3,10 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
-use yii\behaviors\TimestampBehavior;
 use yii\db\Expression;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "product".
@@ -24,9 +25,12 @@ use yii\db\Expression;
  *
  * @property Currency $currency
  * @property Category $category
+ * @property Page     $page
  */
 class Product extends ActiveRecord
 {
+    const FRONTEND_CONTROLLER = 'product';
+
     /**
      * @inheritdoc
      */
@@ -100,6 +104,15 @@ class Product extends ActiveRecord
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPage()
+    {
+        return $this->hasOne(Page::className(), ['entity_id' => 'id'])
+            ->andWhere(['controller' => static::FRONTEND_CONTROLLER]);
+    }
+
     public function getCategoryName()
     {
         if (! empty($this->category))
@@ -120,5 +133,27 @@ class Product extends ActiveRecord
         }
 
         return $variation;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if ($insert)
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+
+        if (! $insert && array_key_exists('name', $changedAttributes))
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        if (! empty($this->page))
+            if (! $this->page->delete())
+                throw new Exception('Can\'t delete product page');
+
+        File::deleteFolder(ProductImage::getStorageFolder($this));
     }
 }

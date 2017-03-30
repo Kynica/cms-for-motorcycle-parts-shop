@@ -35,7 +35,7 @@ class m170323_142610_create_profile_table extends Migration
             'user_id',
             '{{%user}}',
             'id',
-            'NO ACTION',
+            'CASCADE',
             'NO ACTION'
         );
 
@@ -62,7 +62,8 @@ class m170323_142610_create_profile_table extends Migration
     {
         $this->dropForeignKey('fk-profile-user_id', '{{%profile}}');
 
+        $this->truncateTable('{{%user}}');
+
         $this->dropTable('{{%profile}}');
-        $this->dropTable('{{%user}}');
     }
 }

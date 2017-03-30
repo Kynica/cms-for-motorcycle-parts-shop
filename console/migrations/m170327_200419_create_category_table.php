@@ -32,7 +32,7 @@ class m170327_200419_create_category_table extends Migration
             'parent_id',
             '{{%category}}',
             'id',
-            'NO ACTION',
+            'SET NULL',
             'NO ACTION'
         );
     }
