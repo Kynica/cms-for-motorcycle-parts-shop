@@ -23,7 +23,7 @@ class m170329_081617_add_category_id_column_to_product_table extends Migration
             '{{%category}}',
             'id',
             'SET NULL',
-            'SET NULL'
+            'NO ACTION'
         );
     }
 

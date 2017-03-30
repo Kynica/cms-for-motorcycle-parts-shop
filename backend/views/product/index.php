@@ -7,6 +7,7 @@ use kartik\select2\Select2;
 use common\models\Product;
 use common\models\Currency;
 use common\models\Category;
+use common\models\ProductImage;
 
 /**
  * @var $this         yii\web\View
@@ -57,6 +58,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Product::getStockVariation($model->stock);
                 },
                 'filter'    => Product::getStockVariation(),
+            ],
+            [
+                'attribute' => 'image',
+                'content'   => function ($model) {
+                    if (! empty(ProductImage::getFromCache($model, 120, 120, 100, 'product-index'))) {
+                        return Html::img(ProductImage::getFromCache($model, 120, 120, 100, 'product-index'));
+                    }
+                    return null;
+                }
             ],
             'name',
             [

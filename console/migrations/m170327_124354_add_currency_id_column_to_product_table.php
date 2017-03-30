@@ -22,7 +22,7 @@ class m170327_124354_add_currency_id_column_to_product_table extends Migration
             'currency_id',
             '{{%currency}}',
             'id',
-            'NO ACTION',
+            'SET NULL',
             'NO ACTION'
         );
     }
