@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -203,5 +204,14 @@ class Category extends ActiveRecord
             Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
 
         return true;
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+
+        if (! empty($this->page))
+            if (! $this->page->delete())
+                throw new Exception('Can\'t delete category page');
     }
 }
