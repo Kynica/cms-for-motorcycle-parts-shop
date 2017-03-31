@@ -16,9 +16,9 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $name
  * @property string  $stock
  * @property string  $price
+ * @property string  $purchase_price
  * @property string  $sell_price
  * @property string  $old_price
- * @property string  $purchase_price
  * @property string  $created_at
  * @property string  $updated_at
  * @property integer $currency_id
