@@ -58,7 +58,7 @@ use common\models\ProductImage;
             <?= $form->field($model, 'purchase_price')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'sell_price')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
             <?= $form->field($model, 'old_price')->textInput(['maxlength' => true]) ?>
