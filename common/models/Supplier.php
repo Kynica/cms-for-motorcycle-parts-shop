@@ -83,8 +83,7 @@ class Supplier extends ActiveRecord
                 [
                     'type' => 'text',
                     'filetype' => 'text/html',
-                    'url'  => 'fsdfsdf',
-                    'caption' => 'fsfsdf',
+                    'caption' => $this->code . '.csv',
                     'previewAsData' => true
                 ]
             ];
