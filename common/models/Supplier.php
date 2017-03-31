@@ -38,7 +38,8 @@ class Supplier extends ActiveRecord
     {
         return [
             [
-                'class' => SluggableBehavior::className(),
+                'class'         => SluggableBehavior::className(),
+                'attribute'     => 'name',
                 'slugAttribute' => 'code'
             ]
         ];
