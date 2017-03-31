@@ -138,6 +138,11 @@ class Category extends ActiveRecord
             ->andWhere(['controller' => static::FRONTEND_CONTROLLER]);
     }
 
+    public function getUrl()
+    {
+        return $this->page->url;
+    }
+
     public static function getTreeForSelect($ignoreCategoryId = null)
     {
         /** @var static[] $categories */
@@ -197,11 +202,13 @@ class Category extends ActiveRecord
             CategoryClosure::updateFor($this);
         }
 
+        $parentUrl = empty($this->parent) ? '' : $this->parent->getUrl();
+
         if ($insert)
-            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id, $parentUrl);
 
         if (! $insert && array_key_exists('name', $changedAttributes))
-            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $parentUrl);
 
         return true;
     }

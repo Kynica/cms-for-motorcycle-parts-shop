@@ -24,8 +24,9 @@ class m170324_135415_create_product_table extends Migration
             'name'           => $this->string(255)->notNull(),
             'stock'          => "ENUM('in', 'out', 'await') NOT NULL DEFAULT 'in'",
             'price'          => $this->money(10,2)->notNull()->defaultValue(0.00),
-            'old_price'      => $this->money(10,2)->notNull()->defaultValue(0.00),
             'purchase_price' => $this->money(10,2)->notNull()->defaultValue(0.00),
+            'sell_price'     => $this->money(10,2)->notNull()->defaultValue(0.00),
+            'old_price'      => $this->money(10,2)->notNull()->defaultValue(0.00),
             'created_at'     => $this->dateTime()->notNull(),
             'updated_at'     => $this->dateTime()
         ], $tableOptions);

@@ -58,7 +58,7 @@ use common\models\ProductImage;
             <?= $form->field($model, 'purchase_price')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'sell_price')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-md-2">
             <?= $form->field($model, 'old_price')->textInput(['maxlength' => true]) ?>
@@ -82,7 +82,7 @@ use common\models\ProductImage;
                         'uploadAsync' => false,
                         'initialPreview' => ProductImage::getImagesFromCache($model, 1000, 1000, 100, 'product-update-form'),
                         'initialPreviewAsData'=>true,
-                        'initialCaption'=>"The Moon and the Earth",
+                        'initialCaption'=>"",
                         'initialPreviewConfig' => ProductImage::getImagesData($model),
                         'uploadUrl' => Url::to(['/product/image-upload']),
                         'uploadExtraData' => [

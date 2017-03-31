@@ -16,8 +16,9 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $name
  * @property string  $stock
  * @property string  $price
- * @property string  $old_price
  * @property string  $purchase_price
+ * @property string  $sell_price
+ * @property string  $old_price
  * @property string  $created_at
  * @property string  $updated_at
  * @property integer $currency_id
@@ -60,8 +61,8 @@ class Product extends ActiveRecord
             [['name'], 'required'],
             [['stock'], 'string'],
             [['stock'], 'default', 'value' => 'out'],
-            [['price', 'old_price', 'purchase_price'], 'number'],
-            [['price', 'old_price', 'purchase_price'], 'default', 'value' => '0.00'],
+            [['price', 'old_price', 'purchase_price', 'sell_price'], 'number'],
+            [['price', 'old_price', 'purchase_price', 'sell_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],
             [['currency_id', 'category_id'], 'integer'],
             [['sku', 'currency_id', 'category_id'], 'default', 'value' => NULL]
@@ -79,6 +80,7 @@ class Product extends ActiveRecord
             'name'           => Yii::t('product', 'Name'),
             'stock'          => Yii::t('product', 'Stock'),
             'price'          => Yii::t('product', 'Price'),
+            'sell_price'     => Yii::t('product', 'Sell price'),
             'old_price'      => Yii::t('product', 'Old Price'),
             'purchase_price' => Yii::t('product', 'Purchase Price'),
             'created_at'     => Yii::t('product', 'Created At'),
@@ -139,11 +141,16 @@ class Product extends ActiveRecord
     {
         parent::afterSave($insert, $changedAttributes);
 
+        $categoryUrl = empty($this->category) ? '' : $this->category->getUrl();
+
         if ($insert)
-            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id);
+            Page::create($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
 
         if (! $insert && array_key_exists('name', $changedAttributes))
-            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id);
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
+
+        if (! $insert && array_key_exists('category_id', $changedAttributes))
+            Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
     }
 
     public function afterDelete()
