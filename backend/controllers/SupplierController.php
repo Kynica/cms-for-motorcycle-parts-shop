@@ -106,6 +106,15 @@ class SupplierController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionPrice($id)
+    {
+        $model = $this->findModel($id);
+
+        return $this->render('price', [
+            'model' => $model
+        ]);
+    }
+
     /**
      * Finds the Supplier model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
