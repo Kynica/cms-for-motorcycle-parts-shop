@@ -3,11 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Supplier;
-use backend\models\SupplierSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\filters\VerbFilter;
+use common\models\Supplier;
+use backend\models\SupplierSearch;
 
 /**
  * SupplierController implements the CRUD actions for Supplier model.
@@ -109,6 +110,14 @@ class SupplierController extends Controller
     public function actionPrice($id)
     {
         $model = $this->findModel($id);
+
+        if (Yii::$app->request->isPost) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $model->uploadPrice();
+
+            return [];
+        }
 
         return $this->render('price', [
             'model' => $model

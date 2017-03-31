@@ -23,7 +23,7 @@ use kartik\file\FileInput;
                     'initialPreviewAsData'=>false,
                     'initialCaption'=>"",
                     'initialPreviewConfig' => [],
-                    'uploadUrl' => Url::to(['/supplier/upload-price']),
+                    'uploadUrl' => Url::to(['/supplier/price', 'id' => $model->id]),
                     'uploadExtraData' => [
                         'supplier_id'  => $model->id,
                     ],
