@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\SluggableBehavior;
+use common\models\File;
 
 /**
  * This is the model class for table "supplier".
@@ -55,5 +56,17 @@ class Supplier extends ActiveRecord
             'name' => Yii::t('supplier', 'Name'),
             'code' => Yii::t('supplier', 'Code'),
         ];
+    }
+
+    public function getStorageFolder()
+    {
+        return '/' . Yii::$app->params['uploadDir'] . '/' . 'supplier/price';
+    }
+
+    public function uploadPrice()
+    {
+        File::uploadFile($this->getStorageFolder(), $this->code);
+
+        return;
     }
 }
