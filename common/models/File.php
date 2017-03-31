@@ -49,6 +49,23 @@ class File extends Model
         return $newImages;
     }
 
+    public static function uploadFile($filePath, $newName = null)
+    {
+        $fullPath          = Yii::getAlias('@backend') . '/web' . $filePath;
+        if (! FileHelper::createDirectory($fullPath))
+            throw new Exception('Can\'t create folder "' . $fullPath . '" for image');
+        $newFile           = new static();
+        $newFile->upload   = UploadedFile::getInstance($newFile, 'upload');
+
+        $name = empty($newName) ? $newFile->upload->baseName : $newName;
+        $name .= '.' . $newFile->upload->extension;
+
+        if (! $newFile->upload->saveAs($fullPath . '/' . $name))
+            throw new Exception('Can\'t save file "' . $name . '" to folder "' . $fullPath . '"');
+
+        return $name;
+    }
+
     public static function delete($filePath)
     {
         $fullFilePath = Yii::getAlias('@frontend') . '/web' . $filePath;
