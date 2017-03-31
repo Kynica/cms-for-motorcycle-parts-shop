@@ -63,6 +63,35 @@ class Supplier extends ActiveRecord
         return '/' . Yii::$app->params['uploadDir'] . '/' . 'supplier/price';
     }
 
+    public function getPriceUrl()
+    {
+        $path = $this->getStorageFolder() . '/' . $this->code . '.csv';
+        if (File::exist($path)) {
+            return [
+                $path
+            ];
+        } else {
+            return null;
+        }
+    }
+
+    public function getPriceData()
+    {
+        $path = $this->getStorageFolder() . '/' . $this->code . '.csv';
+        if (File::exist($path)) {
+            return [
+                [
+                    'type' => 'text',
+                    'filetype' => 'text/html',
+                    'url'  => 'fsdfsdf',
+                    'caption' => 'fsfsdf',
+                    'previewAsData' => true
+                ]
+            ];
+        }
+        return [];
+    }
+
     public function uploadPrice()
     {
         File::uploadFile($this->getStorageFolder(), $this->code);
