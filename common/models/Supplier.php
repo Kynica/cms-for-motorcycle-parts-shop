@@ -29,7 +29,7 @@ class Supplier extends ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'code'], 'required'],
+            [['name'], 'required'],
             [['name', 'code'], 'string', 'max' => 45],
         ];
     }
