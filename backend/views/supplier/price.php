@@ -19,10 +19,10 @@ use kartik\file\FileInput;
                 ],
                 'pluginOptions' => [
                     'uploadAsync' => false,
-                    'initialPreview' => [],
-                    'initialPreviewAsData'=>false,
+                    'initialPreview' => empty($model->getPriceUrl()) ? '' : $model->getPriceUrl(),
+                    'initialPreviewAsData'=>true,
                     'initialCaption'=>"",
-                    'initialPreviewConfig' => [],
+                    'initialPreviewConfig' => $model->getPriceData(),
                     'uploadUrl' => Url::to(['/supplier/price', 'id' => $model->id]),
                     'uploadExtraData' => [
                         'supplier_id'  => $model->id,
