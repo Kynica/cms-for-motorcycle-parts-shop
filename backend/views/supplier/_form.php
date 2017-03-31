@@ -14,7 +14,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+    <?php if (! $model->isNewRecord): ?>
+        <?= $form->field($model, 'code')->textInput(['maxlength' => true, 'disabled' => true]) ?>
+    <?php endif; ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('supplier', 'Create') : Yii::t('supplier', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
