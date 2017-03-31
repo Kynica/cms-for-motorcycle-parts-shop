@@ -82,7 +82,7 @@ use common\models\ProductImage;
                         'uploadAsync' => false,
                         'initialPreview' => ProductImage::getImagesFromCache($model, 1000, 1000, 100, 'product-update-form'),
                         'initialPreviewAsData'=>true,
-                        'initialCaption'=>"The Moon and the Earth",
+                        'initialCaption'=>"",
                         'initialPreviewConfig' => ProductImage::getImagesData($model),
                         'uploadUrl' => Url::to(['/product/image-upload']),
                         'uploadExtraData' => [
