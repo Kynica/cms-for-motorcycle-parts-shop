@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  * @property integer $supplier_id
  * @property integer $product_id
  * @property string  $sku
- * @property string  $link
+ * @property string  $url
  *
  * @property Product  $product
  * @property Supplier $supplier
@@ -36,7 +36,7 @@ class SupplierProduct extends ActiveRecord
             [['supplier_id', 'sku'], 'required'],
             [['supplier_id', 'product_id'], 'integer'],
             [['sku'], 'string', 'max' => 25],
-            [['link'], 'string', 'max' => 255],
+            [['url'], 'string', 'max' => 255],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
             [['supplier_id'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::className(), 'targetAttribute' => ['supplier_id' => 'id']],
         ];
@@ -52,7 +52,7 @@ class SupplierProduct extends ActiveRecord
             'supplier_id' => 'Supplier ID',
             'product_id'  => 'Product ID',
             'sku'         => 'Sku',
-            'link'        => 'Link',
+            'url'         => 'Url',
         ];
     }
 

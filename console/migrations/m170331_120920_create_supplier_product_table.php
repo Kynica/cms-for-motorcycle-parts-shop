@@ -23,7 +23,7 @@ class m170331_120920_create_supplier_product_table extends Migration
             'supplier_id' => $this->integer()->notNull(),
             'product_id'  => $this->integer(),
             'sku'         => $this->string(25)->notNull(),
-            'link'        => $this->string(255)
+            'url'         => $this->string(255)
         ], $tableOptions);
 
         $this->createIndex('idx-supplier-product-supplier_id', '{{%supplier_product}}', 'supplier_id');
