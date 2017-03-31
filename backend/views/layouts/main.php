@@ -39,6 +39,7 @@ AppAsset::register($this);
         ['label' => \Yii::t('product', 'Products'), 'url' => ['/product/index']],
         ['label' => \Yii::t('category', 'Category'), 'url' => ['/category/index']],
         ['label' => \Yii::t('currency', 'Currency'), 'url' => ['/currency/index']],
+        ['label' => \Yii::t('supplier', 'Supplier'), 'url' => ['/supplier/index']],
         ['label' => 'Profile', 'url' => ['/profile/index']],
     ];
     if (Yii::$app->user->isGuest) {
