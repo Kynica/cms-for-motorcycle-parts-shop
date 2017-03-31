@@ -66,6 +66,13 @@ class File extends Model
         return $name;
     }
 
+    public static function exist($filePath)
+    {
+        $fullFilePath = Yii::getAlias('@backend') . '/web' . $filePath;
+        $ex = file_exists($fullFilePath);
+        return $ex;
+    }
+
     public static function delete($filePath)
     {
         $fullFilePath = Yii::getAlias('@frontend') . '/web' . $filePath;
