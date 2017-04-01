@@ -78,7 +78,13 @@ class PriceWorker
                     $newProduct->name = preg_replace('/\s+/', ' ', $value);
                     break;
                 case '{price}':
+                    $newProduct->price = str_replace(',', '.', $value);
+                    break;
+                case '{purchasePrice}':
                     $newProduct->purchase_price = str_replace(',', '.', $value);
+                    break;
+                case '{stock}':
+                    $newProduct->stock = $value == '+' ? Product::STOCK_IN : Product::STOCK_OUT;
                     break;
                 default:
                     throw new Exception('Unknown template selector - ' . $template[ $key ] . '.');
