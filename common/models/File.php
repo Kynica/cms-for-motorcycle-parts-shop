@@ -84,4 +84,10 @@ class File extends Model
         $fullFilePath = Yii::getAlias('@frontend') . '/web' . $path;
         FileHelper::removeDirectory($fullFilePath);
     }
+
+    public static function getFullPath($path, $alias = '@webroot')
+    {
+        $fullPath = Yii::getAlias($alias) . $path;
+        return $fullPath;
+    }
 }
