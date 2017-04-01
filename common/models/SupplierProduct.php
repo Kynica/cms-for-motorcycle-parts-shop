@@ -13,12 +13,16 @@ use yii\db\ActiveRecord;
  * @property integer $product_id
  * @property string  $sku
  * @property string  $url
+ * @property string  $image_downloaded
  *
  * @property Product  $product
  * @property Supplier $supplier
  */
 class SupplierProduct extends ActiveRecord
 {
+    const IMAGE_DOWNLOADED_YES = 'yes';
+    const IMAGE_DOWNLOADED_NO  = 'no';
+
     /**
      * @inheritdoc
      */
@@ -39,6 +43,8 @@ class SupplierProduct extends ActiveRecord
             [['url'], 'string', 'max' => 255],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
             [['supplier_id'], 'exist', 'skipOnError' => true, 'targetClass' => Supplier::className(), 'targetAttribute' => ['supplier_id' => 'id']],
+            [['image_downloaded'], 'string'],
+            [['image_downloaded'], 'default', 'value' => static::IMAGE_DOWNLOADED_NO],
         ];
     }
 
@@ -48,11 +54,12 @@ class SupplierProduct extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'          => 'ID',
-            'supplier_id' => 'Supplier ID',
-            'product_id'  => 'Product ID',
-            'sku'         => 'Sku',
-            'url'         => 'Url',
+            'id'               => 'ID',
+            'supplier_id'      => 'Supplier ID',
+            'product_id'       => 'Product ID',
+            'sku'              => 'Sku',
+            'url'              => 'Url',
+            'image_downloaded' => 'Image downloaded'
         ];
     }
 
