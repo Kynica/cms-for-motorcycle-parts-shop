@@ -27,9 +27,16 @@ class m170331_120920_create_supplier_product_table extends Migration
             'image_downloaded' => "ENUM('yes', 'no') NOT NULL DEFAULT 'no'"
         ], $tableOptions);
 
-        $this->createIndex('idx-supplier-product-supplier_id',      '{{%supplier_product}}', 'supplier_id');
-        $this->createIndex('idx-supplier-product-product_id',       '{{%supplier_product}}', 'product_id');
-        $this->createIndex('idx-supplier-product-image_downloaded', '{{%supplier_product}}', 'image_downloaded');
+        $this->createIndex('idx-supplier-product-supplier_id', '{{%supplier_product}}', 'supplier_id');
+        $this->createIndex('idx-supplier-product-product_id',  '{{%supplier_product}}', 'product_id');
+
+        $this->createIndex(
+            'idx-supplier-product-image_downloaded',
+            '{{%supplier_product}}',
+            [
+                'url',
+                'image_downloaded'
+            ]);
 
         $this->addForeignKey(
             'fk-supplier-product-supplier_id',
