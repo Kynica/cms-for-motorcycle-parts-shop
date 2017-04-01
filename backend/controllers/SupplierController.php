@@ -8,6 +8,8 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use common\models\Supplier;
+use common\models\Category;
+use common\models\Currency;
 use backend\models\SupplierSearch;
 
 /**
@@ -121,6 +123,19 @@ class SupplierController extends Controller
 
         return $this->render('price', [
             'model' => $model
+        ]);
+    }
+
+    public function actionProcessingPrice($supplierId, $categoryId, $currencyId)
+    {
+        $model    = $this->findModel($supplierId);
+        $category = Category::find()->where(['id' => $categoryId])->one();
+        $currency = Currency::find()->where(['id' => $currencyId])->one();
+
+        return $this->render('processing-price', [
+            'model' => $model,
+            'category' => $category,
+            'currency' => $currency,
         ]);
     }
 
