@@ -21,7 +21,8 @@ class m170331_080004_create_supplier_table extends Migration
         $this->createTable('{{%supplier}}', [
             'id' => $this->primaryKey(),
             'name' => $this->string(45)->notNull(),
-            'code' => $this->string(45)->notNull()
+            'code' => $this->string(45)->notNull(),
+            'site' => $this->string(45)
         ], $tableOptions);
     }
 
