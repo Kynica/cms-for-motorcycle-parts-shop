@@ -12,6 +12,7 @@ use yii\behaviors\SluggableBehavior;
  * @property integer $id
  * @property string  $name
  * @property string  $code
+ * @property string  $site
  */
 class Supplier extends ActiveRecord
 {
@@ -30,7 +31,7 @@ class Supplier extends ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['name', 'code'], 'string', 'max' => 45],
+            [['name', 'code', 'site'], 'string', 'max' => 45],
         ];
     }
 
@@ -54,6 +55,7 @@ class Supplier extends ActiveRecord
             'id'   => Yii::t('supplier', 'ID'),
             'name' => Yii::t('supplier', 'Name'),
             'code' => Yii::t('supplier', 'Code'),
+            'site' => Yii::t('supplier', 'Site'),
         ];
     }
 
