@@ -32,6 +32,7 @@ class Supplier extends ActiveRecord
         return [
             [['name'], 'required'],
             [['name', 'code', 'site'], 'string', 'max' => 45],
+            [['site'], 'default', 'value' => null]
         ];
     }
 
