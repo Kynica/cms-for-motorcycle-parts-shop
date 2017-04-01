@@ -31,7 +31,7 @@ class m170331_120920_create_supplier_product_table extends Migration
         $this->createIndex('idx-supplier-product-product_id',  '{{%supplier_product}}', 'product_id');
 
         $this->createIndex(
-            'idx-supplier-product-image_downloaded',
+            'idx-supplier-product-url-image_downloaded',
             '{{%supplier_product}}',
             [
                 'url',
