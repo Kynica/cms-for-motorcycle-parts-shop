@@ -124,7 +124,7 @@ class PriceWorker
             if (empty($product))
                 throw new Exception('Product with id ' . $supplierProduct->product_id . ' not exist');
 
-            $product->purchase_price = $newProduct->purchase_price;
+            $product->setAttributes($newProduct->getAttributes());
 
             if (! empty($category))
                 $product->category_id = $category->id;
