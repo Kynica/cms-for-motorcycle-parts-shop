@@ -42,6 +42,7 @@ class CategoryProductMargin extends ActiveRecord
             [['category_id', 'currency_id'], 'integer'],
             [['margin_type'], 'string'],
             [['margin'], 'number'],
+            [['margin'], 'default', 'value' => '1.00'],
             [['currency_id'], 'exist', 'skipOnError' => true, 'targetClass' => Currency::className(), 'targetAttribute' => ['currency_id' => 'id']],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
             [['margin_type'], 'default', 'value' => static::MARGIN_TYPE_PERCENT],
