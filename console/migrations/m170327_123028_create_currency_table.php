@@ -23,7 +23,7 @@ class m170327_123028_create_currency_table extends Migration
             'code'   => $this->string(25)->notNull(),
             'name'   => $this->string(25)->notNull(),
             'symbol' => $this->string(25)->notNull(),
-            'rate'   => $this->money(10,2)->notNull()->defaultValue(1)
+            'rate'   => $this->money(10,2)->notNull()->defaultValue(1.00)
         ], $tableOptions);
 
         $this->createIndex('idx-currency-code', '{{%currency}}', 'code');
