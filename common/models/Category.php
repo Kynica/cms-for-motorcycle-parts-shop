@@ -15,14 +15,13 @@ use yii\helpers\ArrayHelper;
  * @property string  $name
  * @property integer $parent_id
  *
- * @property Category   $parent
- * @property Category[] $parents
- * @property Category[] $children
- *
+ * @property Category          $parent
+ * @property Category[]        $parents
+ * @property Category[]        $children
  * @property Category[]        $parentList
  * @property CategoryClosure[] $categoryClosure
- *
- * @property Page $page
+ * @property Page              $page
+ * @property Product[]         $products
  */
 class Category extends ActiveRecord
 {
@@ -136,6 +135,26 @@ class Category extends ActiveRecord
     {
         return $this->hasOne(Page::className(), ['entity_id' => 'id'])
             ->andWhere(['controller' => static::FRONTEND_CONTROLLER]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProducts()
+    {
+        return $this->hasMany(Product::className(), ['category_id' => 'id']);
+    }
+
+    public function getTotalProducts()
+    {
+        return (int) $this->getProducts()->count();
+    }
+
+    public function getTotalProductsWhereCurrency(Currency $currency)
+    {
+        return (int) $this->getProducts()
+            ->where(['currency_id' => $currency->id])
+            ->count();
     }
 
     public function getUrl()
