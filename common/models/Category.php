@@ -15,13 +15,14 @@ use yii\helpers\ArrayHelper;
  * @property string  $name
  * @property integer $parent_id
  *
- * @property Category          $parent
- * @property Category[]        $parents
- * @property Category[]        $children
- * @property Category[]        $parentList
- * @property CategoryClosure[] $categoryClosure
- * @property Page              $page
- * @property Product[]         $products
+ * @property Category                $parent
+ * @property Category[]              $parents
+ * @property Category[]              $children
+ * @property Category[]              $parentList
+ * @property CategoryClosure[]       $categoryClosure
+ * @property Page                    $page
+ * @property Product[]               $products
+ * @property CategoryProductMargin[] $productMargin
  */
 class Category extends ActiveRecord
 {
@@ -145,6 +146,15 @@ class Category extends ActiveRecord
         return $this->hasMany(Product::className(), ['category_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductMargin()
+    {
+        return $this->hasMany(CategoryProductMargin::className(), ['category_id' => 'id'])
+            ->indexBy('currency_id');
+    }
+
     public function getTotalProducts()
     {
         return (int) $this->getProducts()->count();
@@ -155,6 +165,25 @@ class Category extends ActiveRecord
         return (int) $this->getProducts()
             ->where(['currency_id' => $currency->id])
             ->count();
+    }
+
+    public function getProductSellPrice(Product $product, Currency $currency)
+    {
+        $this->productMargin;
+        if (! empty($this->productMargin) && array_key_exists($currency->id, $this->productMargin)) {
+            $sellPrice = null;
+            if (CategoryProductMargin::MARGIN_TYPE_PERCENT == $this->productMargin[ $currency->id ]->margin_type) {
+                $sellPrice = $product->purchase_price + (($product->purchase_price / 100) * $this->productMargin[ $currency->id ]->margin);
+            }
+
+            if (CategoryProductMargin::MARGIN_TYPE_SUM == $this->productMargin[ $currency->id ]->margin_type) {
+                $sellPrice = $product->purchase_price +  $this->productMargin[ $currency->id ]->margin;
+            }
+
+            return (float) $sellPrice;
+        }
+
+        return null;
     }
 
     public function getUrl()
