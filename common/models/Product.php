@@ -188,7 +188,7 @@ class Product extends ActiveRecord
             } else {
                 $sellPrice = $this->category->getProductSellPrice($this, $this->currency);
                 if (! empty($sellPrice)) {
-                    $this->sell_price = $sellPrice;
+                    $this->sell_price = round($sellPrice, 2);
                 }
             }
 
@@ -205,7 +205,7 @@ class Product extends ActiveRecord
             if (0.00 == $this->sell_price) {
                 $this->price = $this->sell_price;
             } else {
-                $this->price = $this->sell_price * $this->currency->rate;
+                $this->price = round($this->sell_price * $this->currency->rate, 2);
             }
 
             if (! $this->save())
