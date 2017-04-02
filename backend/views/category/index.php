@@ -34,7 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'name',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class'    => 'yii\grid\ActionColumn',
+                'template' => '{product-margin} {update} {delete}',
+                'buttons'  => [
+                    'product-margin' => function ($url) {
+                        return Html::a('<span class="glyphicon glyphicon-usd"></span>', $url);
+                    }
+                ]
+            ],
         ],
     ]); ?>
 </div>
