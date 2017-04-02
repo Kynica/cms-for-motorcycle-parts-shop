@@ -169,7 +169,6 @@ class Category extends ActiveRecord
 
     public function getProductSellPrice(Product $product, Currency $currency)
     {
-        $this->productMargin;
         if (! empty($this->productMargin) && array_key_exists($currency->id, $this->productMargin)) {
             $sellPrice = null;
             if (CategoryProductMargin::MARGIN_TYPE_PERCENT == $this->productMargin[ $currency->id ]->margin_type) {
