@@ -27,6 +27,16 @@ class m170327_123028_create_currency_table extends Migration
         ], $tableOptions);
 
         $this->createIndex('idx-currency-code', '{{%currency}}', 'code');
+
+        $this->insert(
+            '{{%currency}}',
+            [
+                'code'   => 'USD',
+                'name'   => 'US Dollar',
+                'symbol' => '$',
+                'rate'   => '1.00'
+            ]
+        );
     }
 
     /**
