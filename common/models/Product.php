@@ -156,6 +156,12 @@ class Product extends ActiveRecord
 
         if (! $insert && array_key_exists('category_id', $changedAttributes))
             Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
+
+        if (! $insert && array_key_exists('purchase_price', $changedAttributes))
+            $this->updateSellPrice();
+
+        if (! $insert && array_key_exists('sell_price', $changedAttributes))
+            $this->updatePrice();
     }
 
     public function afterDelete()
@@ -167,5 +173,26 @@ class Product extends ActiveRecord
                 throw new Exception('Can\'t delete product page');
 
         File::deleteFolder(ProductImage::getStorageFolder($this));
+    }
+
+    protected function updateSellPrice()
+    {
+        if (! empty($this->category_id) && ! empty($this->currency_id)) {
+            $sellPrice = $this->category->getProductSellPrice($this, $this->currency);
+            if (! empty($sellPrice)) {
+                $this->sell_price = $sellPrice;
+                if (! $this->save())
+                    throw new Exception('Can\'t update product sell price.');
+            }
+        }
+    }
+
+    protected function updatePrice()
+    {
+        if (! empty($this->currency_id)) {
+            $this->price = $this->sell_price * $this->currency->rate;
+            if (! $this->save())
+                throw new Exception('Can\'t update product price.');
+        }
     }
 }
