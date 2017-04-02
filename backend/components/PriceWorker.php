@@ -134,6 +134,14 @@ class PriceWorker
 
             if (! $product->save())
                 throw new Exception('Can\'t save Product.');
+
+            $supplierProduct->url = $newSupplierProduct->url;
+
+            if (! $supplierProduct->validate())
+                throw new Exception('Not enough data to save SupplierProduct. Validation not passed.');
+
+            if (! $supplierProduct->save())
+                throw new Exception('Can\'t save SupplierProduct.');
         }
 
         return [
