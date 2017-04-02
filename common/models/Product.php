@@ -84,7 +84,7 @@ class Product extends ActiveRecord
             'sku'            => Yii::t('product', 'Sku'),
             'name'           => Yii::t('product', 'Name'),
             'stock'          => Yii::t('product', 'Stock'),
-            'price'          => Yii::t('product', 'Price'),
+            'price'          => Yii::t('product', 'Site price'),
             'sell_price'     => Yii::t('product', 'Sell price'),
             'old_price'      => Yii::t('product', 'Old Price'),
             'purchase_price' => Yii::t('product', 'Purchase Price'),
