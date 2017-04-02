@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter'    => ArrayHelper::map(Currency::find()->all(), 'id', 'code')
             ],
             'purchase_price',
-            'price',
+            'sell_price',
             'old_price',
 
             [
