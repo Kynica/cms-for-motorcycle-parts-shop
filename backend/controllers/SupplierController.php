@@ -139,6 +139,16 @@ class SupplierController extends Controller
         ]);
     }
 
+    public function actionProcessingProductImage($supplierId, $productNumber)
+    {
+        $model = $this->findModel($supplierId);
+
+        return $this->render('processing-product-image', [
+            'model'         => $model,
+            'productNumber' => $productNumber
+        ]);
+    }
+
     /**
      * Finds the Supplier model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
