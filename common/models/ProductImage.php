@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
+use yii\helpers\Inflector;
 use common\components\ImageCache;
 
 /**
@@ -69,6 +70,13 @@ class ProductImage extends ActiveRecord
         return '/' . Yii::$app->params['uploadDir'] . '/' . 'product' . '/' . $product->id;
     }
 
+    public static function getImageName(Product $product)
+    {
+        $imageNumber = static::find()->where(['product_id' => $product->id])->count();
+        $imageNumber += 1;
+        return Inflector::slug($product->name . '-' . $imageNumber . substr(time(), -2)) . '.jpg';
+    }
+
     public static function uploadFor(Product $product)
     {
         $imageNumber = static::find()->where(['product_id' => $product->id])->count();
@@ -87,6 +95,23 @@ class ProductImage extends ActiveRecord
         }
 
         return;
+    }
+
+    public static function addFor(Product $product, $image)
+    {
+        $imageNumber = static::find()->where(['product_id' => $product->id])->count();
+        $imageNumber += 1;
+
+        $new = new static([
+            'product_id' => $product->id,
+            'path'       => $image,
+            'sort'       => $imageNumber
+        ]);
+
+        if (! $new->save())
+            throw new Exception('Can\'t save image');
+
+        return true;
     }
 
     public static function deleteOne($id)

@@ -32,6 +32,10 @@ class Product extends ActiveRecord
 {
     const FRONTEND_CONTROLLER = 'product';
 
+    const STOCK_IN    = 'in';
+    const STOCK_OUT   = 'out';
+    const STOCK_AWAIT = 'await';
+
     /**
      * @inheritdoc
      */
@@ -60,10 +64,11 @@ class Product extends ActiveRecord
         return [
             [['name'], 'required'],
             [['stock'], 'string'],
-            [['stock'], 'default', 'value' => 'out'],
+            [['stock'], 'default', 'value' => static::STOCK_OUT],
             [['price', 'old_price', 'purchase_price', 'sell_price'], 'number'],
             [['price', 'old_price', 'purchase_price', 'sell_price'], 'default', 'value' => '0.00'],
             [['sku', 'name'], 'string', 'max' => 255],
+            [['sku', 'name'], 'trim'],
             [['currency_id', 'category_id'], 'integer'],
             [['sku', 'currency_id', 'category_id'], 'default', 'value' => NULL]
         ];
@@ -125,9 +130,9 @@ class Product extends ActiveRecord
     public static function getStockVariation($key = null)
     {
         $variation = [
-            'in'    => Yii::t('product', 'In Stock'),
-            'out'   => Yii::t('product', 'Out of Stock'),
-            'await' => Yii::t('product', 'Await')
+            static::STOCK_IN    => Yii::t('product', 'In Stock'),
+            static::STOCK_OUT   => Yii::t('product', 'Out of Stock'),
+            static::STOCK_AWAIT => Yii::t('product', 'Await')
         ];
 
         if (! empty($key)) {

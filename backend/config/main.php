@@ -61,6 +61,9 @@ return [
                 'page' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                 ],
+                'supplier' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
             ],
         ],
     ],
