@@ -23,7 +23,7 @@ class m170402_082655_create_category_product_margin_table extends Migration
             'category_id' => $this->integer()->notNull(),
             'currency_id' => $this->integer()->notNull(),
             'margin_type' => "ENUM('sum', 'percent') NOT NULL DEFAULT 'percent'",
-            'margin'      => $this->money(10,2)->notNull()->defaultValue(0.00)
+            'margin'      => $this->money(10,2)->notNull()->defaultValue(1.00)
         ], $tableOptions);
 
         $this->createIndex('idx-category-product-margin-category_id', '{{%category_product_margin}}', 'category_id');
