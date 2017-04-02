@@ -41,7 +41,7 @@ use common\models\Currency;
         </div>
     </div>
 
-    <div class="row">
+    <div class="row form-group">
         <div class="col-md-8 col-md-offset-2">
             <?php $form = ActiveForm::begin([
                 'method' => 'get',
@@ -79,6 +79,32 @@ use common\models\Currency;
             </div>
 
             <?= Html::submitButton(Yii::t('supplier', 'Processing price'), ['class' => 'btn btn-primary']) ?>
+
+            <?php ActiveForm::end() ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <?php $form = ActiveForm::begin([
+                'method' => 'get',
+                'action' => ['/supplier/processing-product-image']
+            ]) ?>
+
+            <?= Html::input('hidden', 'supplierId', $model->id) ?>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Product number</label>
+                        <?= Html::input('text', 'productNumber', '', [
+                            'class' => 'form-control'
+                        ]) ?>
+                    </div>
+                </div>
+            </div>
+
+            <?= Html::submitButton(Yii::t('supplier', 'Processing product image'), ['class' => 'btn btn-primary']) ?>
 
             <?php ActiveForm::end() ?>
         </div>
