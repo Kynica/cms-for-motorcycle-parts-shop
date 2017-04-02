@@ -3,11 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Category;
-use backend\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\models\Category;
+use common\models\CategoryProductMargin;
+use backend\models\CategorySearch;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
@@ -89,6 +90,24 @@ class CategoryController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionProductMargin($id)
+    {
+        $model = $this->findModel($id);
+
+        if (Yii::$app->request->isPost) {
+            CategoryProductMargin::updateMargins(
+                $model,
+                Yii::$app->request->post('CategoryProductMargin')
+            );
+        }
+
+        $margins = CategoryProductMargin::getMargins($model);
+
+        return $this->render('product-margin', [
+            'margins' => $margins,
         ]);
     }
 
