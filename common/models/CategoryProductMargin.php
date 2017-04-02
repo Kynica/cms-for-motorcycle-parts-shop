@@ -3,7 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\base\Exception;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "category_product_margin".
@@ -74,5 +76,107 @@ class CategoryProductMargin extends ActiveRecord
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    }
+
+    public static function getMargins(Category $category)
+    {
+        /** @var Currency[] $currency */
+        $currency = Currency::find()->all();
+        $margins  = static::find()
+            ->where(['category_id' => $category->id])
+            ->indexBy('currency_id')
+            ->all();
+
+        foreach ($currency as $c) {
+            if (! isset($margins[ $c->id ])) {
+                $margins[ $c->id ] = new static([
+                    'category_id' => $category->id,
+                    'currency_id' => $c->id,
+                ]);
+
+                if (! $margins[ $c->id ]->save())
+                    throw new Exception('Can\'t save new category product margin.');
+            }
+        }
+
+        return $margins;
+    }
+
+    public static function updateMargins(Category $category, $marginsData)
+    {
+        /** @var static[] $margins */
+        $margins = static::find()
+            ->where(['category_id' => $category->id])
+            ->indexBy('id')
+            ->all();
+
+        foreach ($margins as $margin) {
+            if (array_key_exists($margin->id, $marginsData)) {
+                $margin->setAttributes($marginsData[ $margin->id ]);
+
+                if (! $margin->save())
+                    throw new Exception('Can\'t save category product margin');
+            }
+        }
+
+        return;
+    }
+
+    public static function getMarginTypes()
+    {
+        return [
+            static::MARGIN_TYPE_PERCENT => 'Percent',
+            static::MARGIN_TYPE_SUM     => 'Sum',
+        ];
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if (! $insert && count($changedAttributes) > 0)
+            $this->updateCategoryProductPrice($this->category);
+    }
+
+    protected function updateCategoryProductPrice(Category $category)
+    {
+        if ($category->getTotalProductsWhereCurrency($this->currency)) {
+            $db = Yii::$app->db;
+
+            if (static::MARGIN_TYPE_PERCENT == $this->margin_type) {
+                $db->createCommand()
+                    ->update(
+                        Product::tableName(),
+                        [
+                            'sell_price' => new Expression("(purchase_price + ((purchase_price / 100) * {$this->margin}))")
+                        ],
+                        "currency_id = {$this->currency->id}"
+                    )->execute();
+            }
+
+            if (static::MARGIN_TYPE_SUM == $this->margin_type) {
+                $db = Yii::$app->db;
+
+                $db->createCommand()
+                    ->update(
+                        Product::tableName(),
+                        [
+                            'sell_price' => new Expression("(purchase_price + {$this->margin})")
+                        ],
+                        "currency_id = {$this->currency->id}"
+                    )->execute();
+            }
+
+            $db->createCommand()
+                ->update(
+                    Product::tableName(),
+                    [
+                        'price' => new Expression("(sell_price * {$this->currency->rate})")
+                    ],
+                    "currency_id = {$this->currency->id}"
+                )->execute();
+
+            return;
+        }
     }
 }
