@@ -2,10 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Category;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\CategorySearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this         yii\web\View
+ * @var $searchModel  backend\models\CategorySearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
+
 
 $this->title = Yii::t('product', 'Categories');
 $this->params['breadcrumbs'][] = $this->title;
@@ -33,6 +37,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'name',
+            [
+                'attribute' => 'totalProducts',
+                'content'   => function ($model) {
+                    /** @var $model Category */
+                    return $model->getTotalProducts();
+                }
+            ],
 
             [
                 'class'    => 'yii\grid\ActionColumn',
