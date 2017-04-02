@@ -19,6 +19,9 @@ use yii\db\ActiveRecord;
  */
 class CategoryProductMargin extends ActiveRecord
 {
+    const MARGIN_TYPE_SUM     = 'sum';
+    const MARGIN_TYPE_PERCENT = 'percent';
+
     /**
      * @inheritdoc
      */
