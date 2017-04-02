@@ -162,6 +162,11 @@ class Product extends ActiveRecord
 
         if (! $insert && array_key_exists('sell_price', $changedAttributes))
             $this->updatePrice();
+
+        if (array_key_exists('currency_id', $changedAttributes)) {
+            $this->updateSellPrice();
+            $this->updatePrice();
+        }
     }
 
     public function afterDelete()
@@ -178,21 +183,35 @@ class Product extends ActiveRecord
     protected function updateSellPrice()
     {
         if (! empty($this->category_id) && ! empty($this->currency_id)) {
-            $sellPrice = $this->category->getProductSellPrice($this, $this->currency);
-            if (! empty($sellPrice)) {
-                $this->sell_price = $sellPrice;
-                if (! $this->save())
-                    throw new Exception('Can\'t update product sell price.');
+            if (0.00 == $this->purchase_price) {
+                $this->sell_price = 0.00;
+            } else {
+                $sellPrice = $this->category->getProductSellPrice($this, $this->currency);
+                if (! empty($sellPrice)) {
+                    $this->sell_price = $sellPrice;
+                }
             }
+
+            if (! $this->save())
+                throw new Exception('Can\'t update product sell price.');
         }
+
+        return;
     }
 
     protected function updatePrice()
     {
         if (! empty($this->currency_id)) {
-            $this->price = $this->sell_price * $this->currency->rate;
+            if (0.00 == $this->sell_price) {
+                $this->price = $this->sell_price;
+            } else {
+                $this->price = $this->sell_price * $this->currency->rate;
+            }
+
             if (! $this->save())
                 throw new Exception('Can\'t update product price.');
         }
+
+        return;
     }
 }
