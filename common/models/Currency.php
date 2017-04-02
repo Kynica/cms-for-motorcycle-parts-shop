@@ -33,8 +33,9 @@ class Currency extends ActiveRecord
     {
         return [
             [['code', 'name', 'symbol'], 'required'],
-            [['rate'], 'number'],
             [['code', 'name', 'symbol'], 'string', 'max' => 25],
+            [['rate'], 'number'],
+            [['rate'], 'default', 'value' => '1.00'],
         ];
     }
 
