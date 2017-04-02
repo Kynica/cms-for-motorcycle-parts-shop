@@ -64,6 +64,9 @@ return [
                 'supplier' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                 ],
+                'category-product-margin' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
             ],
         ],
     ],
