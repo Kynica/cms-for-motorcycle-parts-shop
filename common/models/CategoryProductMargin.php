@@ -151,7 +151,7 @@ class CategoryProductMargin extends ActiveRecord
                         [
                             'sell_price' => new Expression("(purchase_price + ((purchase_price / 100) * {$this->margin}))")
                         ],
-                        "currency_id = {$this->currency->id}"
+                        "currency_id = {$this->currency->id} AND purchase_price != '0.00'"
                     )->execute();
             }
 
@@ -164,7 +164,7 @@ class CategoryProductMargin extends ActiveRecord
                         [
                             'sell_price' => new Expression("(purchase_price + {$this->margin})")
                         ],
-                        "currency_id = {$this->currency->id}"
+                        "currency_id = {$this->currency->id} AND purchase_price != '0.00'"
                     )->execute();
             }
 
@@ -174,7 +174,7 @@ class CategoryProductMargin extends ActiveRecord
                     [
                         'price' => new Expression("(sell_price * {$this->currency->rate})")
                     ],
-                    "currency_id = {$this->currency->id}"
+                    "currency_id = {$this->currency->id} AND sell_price != '0.00'"
                 )->execute();
 
             return;
