@@ -6,12 +6,14 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Category;
+use yii\db\ActiveQuery;
 
 /**
  * CategorySearch represents the model behind the search form about `common\models\Category`.
  */
 class CategorySearch extends Category
 {
+    public $url;
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class CategorySearch extends Category
     {
         return [
             [['id'], 'integer'],
-            [['name'], 'safe'],
+            [['name', 'url'], 'safe'],
         ];
     }
 
@@ -63,6 +65,14 @@ class CategorySearch extends Category
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
+
+        if (! empty($this->url)) {
+            $query->joinWith(['page' => function ($q) {
+                /** @var $q ActiveQuery */
+                $q->where(['controller' => Category::FRONTEND_CONTROLLER]);
+                $q->andWhere(['like', 'url', $this->url]);
+            }]);
+        }
 
         return $dataProvider;
     }

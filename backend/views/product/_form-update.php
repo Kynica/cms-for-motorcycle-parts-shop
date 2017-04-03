@@ -96,10 +96,10 @@ use common\models\ProductImage;
                     ],
                     'pluginOptions' => [
                         'uploadAsync' => false,
-                        'initialPreview' => ProductImage::getImagesFromCache($model, 1000, 1000, 100, 'product-update-form'),
+                        'initialPreview' => $model->getImagesForFileInput(1000, 1000, 100, 'product-update-form'),
                         'initialPreviewAsData'=>true,
                         'initialCaption'=>"",
-                        'initialPreviewConfig' => ProductImage::getImagesData($model),
+                        'initialPreviewConfig' => $model->getImagesDataForFileInput(),
                         'uploadUrl' => Url::to(['/product/image-upload']),
                         'uploadExtraData' => [
                             'product_id'  => $model->id,

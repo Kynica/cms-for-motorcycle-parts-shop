@@ -27,7 +27,7 @@ class SupplierImageGrabber
 
             if (Grabber::isPageExist($imageUrl)) {
                 $product   = Product::findOne($supplierProduct->product_id);
-                $imagePath = File::getFullPath(ProductImage::getStorageFolder($product), '@frontend/web');
+                $imagePath = File::getFullPath(ProductImage::getStorageFolder(), '@frontend/web');
                 $imageName = ProductImage::getImageName($product);
                 $savePath  = $imagePath . '/' . $imageName;
 

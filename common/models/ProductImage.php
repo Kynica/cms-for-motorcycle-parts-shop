@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -22,7 +21,6 @@ use common\components\ImageCache;
  */
 class ProductImage extends ActiveRecord
 {
-    protected static $images = [];
     /**
      * @inheritdoc
      */
@@ -65,7 +63,7 @@ class ProductImage extends ActiveRecord
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 
-    public static function getStorageFolder(Product $product)
+    public static function getStorageFolder()
     {
         return '/' . Yii::$app->params['uploadDir'] . '/' . 'product-image' . '/' . date("Y-m") . '/' . date("d");
     }
@@ -80,13 +78,13 @@ class ProductImage extends ActiveRecord
     public static function uploadFor(Product $product)
     {
         $imageNumber = static::find()->where(['product_id' => $product->id])->count();
-        $newImages   = File::uploadImages(static::getStorageFolder($product), $product->name);
+        $newImages   = File::uploadImages(static::getStorageFolder(), $product->name);
 
         foreach ($newImages as $name) {
             $imageNumber += 1;
             $new = new static([
                 'product_id' => $product->id,
-                'path'       => $name,
+                'path'       => static::getStorageFolder() . '/' . $name,
                 'sort'       => $imageNumber
             ]);
 
@@ -104,7 +102,7 @@ class ProductImage extends ActiveRecord
 
         $new = new static([
             'product_id' => $product->id,
-            'path'       => $image,
+            'path'       => static::getStorageFolder() . '/' .$image,
             'sort'       => $imageNumber
         ]);
 
@@ -119,7 +117,7 @@ class ProductImage extends ActiveRecord
         $image = static::findOne($id);
         $product = Product::findOne($image->product_id);
         if (! empty($product) && $image->delete()) {
-            File::delete($image->getStorageFolder($product) . '/' .$image->path);
+            File::delete($image->path);
             Yii::$app->db->createCommand()
                 ->update(
                     static::tableName(),
@@ -138,86 +136,17 @@ class ProductImage extends ActiveRecord
             if (! $image->delete())
                 throw new Exception('Can\'t delete image from database where product id is' . $product->id);
 
-            if (File::delete($image->getStorageFolder($product) . '/' .$image->path))
+            if (File::delete($image->path))
                 throw new Exception('Can\'t delete product image where product id is ' . $product->id);
         }
         return;
     }
 
-    public static function loadImagesFor(Product $product)
+    public function thumbnail($width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
-        if (! array_key_exists($product->id, static::$images)) {
-            static::$images[ $product->id ] = static::find()
-                ->where(['product_id' => $product->id])
-                ->orderBy(['sort' => SORT_ASC])
-                ->indexBy('sort')
-                ->all();
-        }
-    }
-
-    public static function getImage(Product $product)
-    {
-        static::loadImagesFor($product);
-
-        if (! empty(static::$images[ $product->id ][1])) {
-            $image = static::$images[ $product->id ][1];
-
-            return ProductImage::getStorageFolder($product) . '/' . $image->path;
-        }
-
-        return null;
-    }
-
-    public static function getImages(Product $product)
-    {
-        static::loadImagesFor($product);
-
-        $images = [];
-        foreach (static::$images[ $product->id ] as $image) {
-            $images[] = ProductImage::getStorageFolder($product) . '/' . $image->path;
-        }
-        return $images;
-    }
-
-    public static function getImageFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
-    {
-        static::loadImagesFor($product);
-
-        if (! empty(static::$images[ $product->id ][1])) {
-            $image = static::$images[ $product->id ][1];
-
-            return ImageCache::create(
-                ProductImage::getStorageFolder($product) . '/' . $image->path,
-                $width, $height, $quality, $scope
-            );
-        }
-
-        return null;
-    }
-
-    public static function getImagesFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
-    {
-        static::loadImagesFor($product);
-
-        $images = [];
-        foreach (static::$images[ $product->id ] as $image) {
-            $images[] = ImageCache::create(
-                ProductImage::getStorageFolder($product) . '/' . $image->path,
-                $width, $height, $quality, $scope
-            );
-        }
-        return $images;
-    }
-
-    public static function getImagesData(Product $product)
-    {
-        $images = [];
-        foreach (static::$images[ $product->id ] as $image) {
-            /** @var $image ProductImage */
-            $images[] = [
-                'url' => Url::to(['/product/image-delete', 'imageId' => $image->id])
-            ];
-        }
-        return $images;
+        return ImageCache::create(
+            $this->path,
+            $width, $height, $quality, $scope
+        );
     }
 }
