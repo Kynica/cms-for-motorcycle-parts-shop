@@ -44,7 +44,7 @@ class m170327_202130_create_category_closure_table extends Migration
             'descendant',
             '{{%category}}',
             'id',
-            'NO ACTION',
+            'CASCADE',
             'NO ACTION'
         );
     }
