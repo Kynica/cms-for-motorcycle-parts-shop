@@ -59,4 +59,30 @@ class Product extends P
 
         return $images;
     }
+
+    public function getBreadcrumbData()
+    {
+        $breadcrumb = [];
+
+        if (! empty($this->category)) {
+            /** @var Category[] $categoryParents */
+            $categoryParents =  $this->category->getParents();
+
+            foreach ($categoryParents as $categoryParent) {
+                $breadcrumb[] = [
+                    'label' => $categoryParent->name,
+                    'url'   => $categoryParent->page->url
+                ];
+            }
+
+            $breadcrumb[] = [
+                'label' => $this->category->name,
+                'url'   => $this->category->page->url
+            ];
+
+            $breadcrumb[] = $this->name;
+        }
+
+        return $breadcrumb;
+    }
 }
