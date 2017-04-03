@@ -45,6 +45,15 @@ return [
                 ]
             ],
         ],
+        'view' => [
+            'theme' => [
+                'basePath' => '@app/views/themes/basic',
+                'baseUrl' => '@web/views/themes/basic',
+                'pathMap' => [
+                    '@app/views' => '@app/views/themes/basic',
+                ],
+            ],
+        ],
     ],
     'params' => $params,
 ];
