@@ -65,7 +65,7 @@ class ProductImage extends ActiveRecord
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
 
-    public static function getStorageFolder(Product $product)
+    public static function getStorageFolder()
     {
         return '/' . Yii::$app->params['uploadDir'] . '/' . 'product-image' . '/' . date("Y-m") . '/' . date("d");
     }
@@ -80,13 +80,13 @@ class ProductImage extends ActiveRecord
     public static function uploadFor(Product $product)
     {
         $imageNumber = static::find()->where(['product_id' => $product->id])->count();
-        $newImages   = File::uploadImages(static::getStorageFolder($product), $product->name);
+        $newImages   = File::uploadImages(static::getStorageFolder(), $product->name);
 
         foreach ($newImages as $name) {
             $imageNumber += 1;
             $new = new static([
                 'product_id' => $product->id,
-                'path'       => $name,
+                'path'       => static::getStorageFolder() . '/' . $name,
                 'sort'       => $imageNumber
             ]);
 
@@ -104,7 +104,7 @@ class ProductImage extends ActiveRecord
 
         $new = new static([
             'product_id' => $product->id,
-            'path'       => $image,
+            'path'       => static::getStorageFolder() . '/' .$image,
             'sort'       => $imageNumber
         ]);
 
@@ -119,7 +119,7 @@ class ProductImage extends ActiveRecord
         $image = static::findOne($id);
         $product = Product::findOne($image->product_id);
         if (! empty($product) && $image->delete()) {
-            File::delete($image->getStorageFolder($product) . '/' .$image->path);
+            File::delete($image->path);
             Yii::$app->db->createCommand()
                 ->update(
                     static::tableName(),
@@ -138,7 +138,7 @@ class ProductImage extends ActiveRecord
             if (! $image->delete())
                 throw new Exception('Can\'t delete image from database where product id is' . $product->id);
 
-            if (File::delete($image->getStorageFolder($product) . '/' .$image->path))
+            if (File::delete($image->path))
                 throw new Exception('Can\'t delete product image where product id is ' . $product->id);
         }
         return;
@@ -162,7 +162,7 @@ class ProductImage extends ActiveRecord
         if (! empty(static::$images[ $product->id ][1])) {
             $image = static::$images[ $product->id ][1];
 
-            return ProductImage::getStorageFolder($product) . '/' . $image->path;
+            return $image->path;
         }
 
         return null;
@@ -174,7 +174,7 @@ class ProductImage extends ActiveRecord
 
         $images = [];
         foreach (static::$images[ $product->id ] as $image) {
-            $images[] = ProductImage::getStorageFolder($product) . '/' . $image->path;
+            $images[] = $image->path;
         }
         return $images;
     }
@@ -187,7 +187,7 @@ class ProductImage extends ActiveRecord
             $image = static::$images[ $product->id ][1];
 
             return ImageCache::create(
-                ProductImage::getStorageFolder($product) . '/' . $image->path,
+                $image->path,
                 $width, $height, $quality, $scope
             );
         }
@@ -202,7 +202,7 @@ class ProductImage extends ActiveRecord
         $images = [];
         foreach (static::$images[ $product->id ] as $image) {
             $images[] = ImageCache::create(
-                ProductImage::getStorageFolder($product) . '/' . $image->path,
+                $image->path,
                 $width, $height, $quality, $scope
             );
         }
