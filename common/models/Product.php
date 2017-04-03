@@ -177,7 +177,7 @@ class Product extends ActiveRecord
             if (! $this->page->delete())
                 throw new Exception('Can\'t delete product page');
 
-        File::deleteFolder(ProductImage::getStorageFolder($this));
+        ProductImage::deleteAllFor($this);
     }
 
     protected function updateSellPrice()
