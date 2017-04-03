@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'image',
                 'content'   => function ($model) {
                     /** @var $model Product */
-                    if (count($model->images)) {
+                    if ($model->isHasImages()) {
                         return Html::img($model->getMainImage()->thumbnail(120, 120, 100, 'product-index'));
                     }
                     return null;
