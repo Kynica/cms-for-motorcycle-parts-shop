@@ -154,10 +154,10 @@ class Product extends ActiveRecord
         return $variation;
     }
 
-    public function getMainImage($width = 200, $height = 200, $quality = 100, $scope = 'global')
+    public function getMainImage()
     {
         if (isset($this->images[1]))
-            return $this->images[1]->getFromCache($width, $height, $quality, $scope);
+            return $this->images[1];
         return null;
     }
 
@@ -166,7 +166,7 @@ class Product extends ActiveRecord
         $images = [];
 
         foreach ($this->images as $image) {
-            $images[] = $image->getFromCache($width, $height, $quality, $scope);
+            $images[] = $image->thumbnail($width, $height, $quality, $scope);
         }
 
         return $images;

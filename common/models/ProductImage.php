@@ -142,7 +142,7 @@ class ProductImage extends ActiveRecord
         return;
     }
 
-    public function getFromCache($width = 200, $height = 200, $quality = 100, $scope = 'global')
+    public function thumbnail($width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
         return ImageCache::create(
             $this->path,
