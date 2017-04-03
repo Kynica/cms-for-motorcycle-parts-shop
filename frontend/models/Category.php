@@ -19,4 +19,24 @@ class Category extends C
     {
         return $this->name;
     }
+
+    public function getMetaTitle()
+    {
+        return $this->meta_title;
+    }
+
+    public function getMetaDescription()
+    {
+        return $this->meta_description;
+    }
+
+    public function getMetaKeywords()
+    {
+        return $this->meta_keywords;
+    }
+
+    public function getSeoText()
+    {
+        return $this->seo_text;
+    }
 }
