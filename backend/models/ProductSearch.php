@@ -42,7 +42,11 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find();
+        $query = Product::find()
+            ->with([
+                'category',
+                'currency'
+            ]);
 
         // add conditions that should always apply here
 

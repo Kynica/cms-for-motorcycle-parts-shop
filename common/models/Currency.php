@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "currency".
@@ -33,8 +34,9 @@ class Currency extends ActiveRecord
     {
         return [
             [['code', 'name', 'symbol'], 'required'],
-            [['rate'], 'number'],
             [['code', 'name', 'symbol'], 'string', 'max' => 25],
+            [['rate'], 'number'],
+            [['rate'], 'default', 'value' => '1.00'],
         ];
     }
 
@@ -58,5 +60,28 @@ class Currency extends ActiveRecord
     public function getProducts()
     {
         return $this->hasMany(Product::className(), ['currency_id' => 'id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        if (! $insert && array_key_exists('rate', $changedAttributes))
+            $this->updateProductPrice();
+    }
+
+    protected function updateProductPrice()
+    {
+        $db = Yii::$app->db;
+
+        $db->createCommand()
+            ->update(Product::tableName(),
+                [
+                    'price' => new Expression("sell_price * {$this->rate}")
+                ],
+                "currency_id = {$this->id} AND price != '0.00'"
+            )->execute();
+
+        return;
     }
 }

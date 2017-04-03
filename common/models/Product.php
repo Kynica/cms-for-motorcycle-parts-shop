@@ -84,7 +84,7 @@ class Product extends ActiveRecord
             'sku'            => Yii::t('product', 'Sku'),
             'name'           => Yii::t('product', 'Name'),
             'stock'          => Yii::t('product', 'Stock'),
-            'price'          => Yii::t('product', 'Price'),
+            'price'          => Yii::t('product', 'Site price'),
             'sell_price'     => Yii::t('product', 'Sell price'),
             'old_price'      => Yii::t('product', 'Old Price'),
             'purchase_price' => Yii::t('product', 'Purchase Price'),
@@ -156,6 +156,17 @@ class Product extends ActiveRecord
 
         if (! $insert && array_key_exists('category_id', $changedAttributes))
             Page::updateUrl($this->name, static::FRONTEND_CONTROLLER, $this->id, $categoryUrl);
+
+        if (! $insert && array_key_exists('purchase_price', $changedAttributes))
+            $this->updateSellPrice();
+
+        if (! $insert && array_key_exists('sell_price', $changedAttributes))
+            $this->updatePrice();
+
+        if (array_key_exists('currency_id', $changedAttributes)) {
+            $this->updateSellPrice();
+            $this->updatePrice();
+        }
     }
 
     public function afterDelete()
@@ -166,6 +177,41 @@ class Product extends ActiveRecord
             if (! $this->page->delete())
                 throw new Exception('Can\'t delete product page');
 
-        File::deleteFolder(ProductImage::getStorageFolder($this));
+        ProductImage::deleteAllFor($this);
+    }
+
+    protected function updateSellPrice()
+    {
+        if (! empty($this->category_id) && ! empty($this->currency_id)) {
+            if (0.00 == $this->purchase_price) {
+                $this->sell_price = 0.00;
+            } else {
+                $sellPrice = $this->category->getProductSellPrice($this, $this->currency);
+                if (! empty($sellPrice)) {
+                    $this->sell_price = round($sellPrice, 2);
+                }
+            }
+
+            if (! $this->save())
+                throw new Exception('Can\'t update product sell price.');
+        }
+
+        return;
+    }
+
+    protected function updatePrice()
+    {
+        if (! empty($this->currency_id)) {
+            if (0.00 == $this->sell_price) {
+                $this->price = $this->sell_price;
+            } else {
+                $this->price = round($this->sell_price * $this->currency->rate, 2);
+            }
+
+            if (! $this->save())
+                throw new Exception('Can\'t update product price.');
+        }
+
+        return;
     }
 }

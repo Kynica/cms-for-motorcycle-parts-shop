@@ -6,6 +6,7 @@ return [
     'Sell price'      => 'Цена продажи',
     'Old Price'       => 'Старая цена',
     'Purchase Price'  => 'Цена закупки',
+    'Site price'      => 'Цена на сайте',
     'product'         => 'товар',
     'Product'         => 'Товар',
     'Products'        => 'Товары',

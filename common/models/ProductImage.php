@@ -67,7 +67,7 @@ class ProductImage extends ActiveRecord
 
     public static function getStorageFolder(Product $product)
     {
-        return '/' . Yii::$app->params['uploadDir'] . '/' . 'product' . '/' . $product->id;
+        return '/' . Yii::$app->params['uploadDir'] . '/' . 'product-image' . '/' . date("Y-m") . '/' . date("d");
     }
 
     public static function getImageName(Product $product)
