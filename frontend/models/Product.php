@@ -3,7 +3,6 @@
 namespace frontend\models;
 
 use common\models\Product AS P;
-use common\models\ProductImage;
 
 class Product extends P
 {
@@ -33,11 +32,6 @@ class Product extends P
     public function getPrice()
     {
         return $this->price;
-    }
-
-    public function getMainImage($width = 200, $height = 200, $quality = 100, $scope = 'global')
-    {
-        return ProductImage::getImageFromCache($this, $width = 200, $height = 200, $quality = 100, $scope = 'global');
     }
 
     public function getName()
