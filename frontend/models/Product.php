@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use common\models\Product AS P;
+use common\models\ProductImage;
 
 class Product extends P
 {
@@ -42,5 +43,20 @@ class Product extends P
     public function getUrl()
     {
         return $this->page->url;
+    }
+
+    /**
+     * @return ProductImage[]
+     */
+    public function getImagesWithoutMain()
+    {
+        $images = [];
+
+        foreach ($this->images as $sort => $image) {
+            if (1 != $sort)
+                $images[] = $image;
+        }
+
+        return $images;
     }
 }
