@@ -44,6 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getTotalProducts();
                 }
             ],
+            [
+                'attribute' => 'url',
+                'content'   => function ($model) {
+                    /** @var $model Category */
+                    return $model->page->url;
+                }
+            ],
 
             [
                 'class'    => 'yii\grid\ActionColumn',
