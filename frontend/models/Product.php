@@ -21,12 +21,12 @@ class Product extends P
 
     public function getDiscount()
     {
-        return 0;
+        return ($this->old_price * $this->currency->rate) - $this->price;
     }
 
     public function getOldPrice()
     {
-        return $this->old_price;
+        return $this->old_price * $this->currency->rate;
     }
 
     public function getPrice()
