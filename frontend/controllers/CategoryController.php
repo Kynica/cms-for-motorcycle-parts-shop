@@ -5,8 +5,10 @@ namespace frontend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\data\Pagination;
 use common\models\Page;
-use common\models\Category;
+use frontend\models\Category;
+use frontend\models\Product;
 
 class CategoryController extends Controller
 {
@@ -18,6 +20,26 @@ class CategoryController extends Controller
         if (empty($category))
             throw new NotFoundHttpException(Yii::t('category', 'Category not found.'));
 
-        return $this->renderContent($category->name);
+        $productQuery = Product::find()
+            ->where([
+                'in',
+                'category_id',
+                $category->getIDsForProducts()
+            ]);
+
+        $pagination = new Pagination([
+            'defaultPageSize' => 20,
+            'totalCount'      => $productQuery->count()
+        ]);
+
+        $products = $productQuery
+            ->limit($pagination->limit)
+            ->offset($pagination->offset)
+            ->all();
+
+        return $this->render('index', [
+            'category' => $category,
+            'products' => $products,
+        ]);
     }
 }
