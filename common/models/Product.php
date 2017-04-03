@@ -154,6 +154,13 @@ class Product extends ActiveRecord
         return $variation;
     }
 
+    public function isHasImages()
+    {
+        if (! count($this->images))
+            return false;
+        return true;
+    }
+
     public function getMainImage()
     {
         if (isset($this->images[1]))
