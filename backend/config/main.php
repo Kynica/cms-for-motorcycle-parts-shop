@@ -71,4 +71,8 @@ return [
         ],
     ],
     'params' => $params,
+    'as AccessBehavior' => [
+        'class'         => 'backend\components\AccessBehavior',
+        'redirectUri' => '/site/login'
+    ],
 ];
