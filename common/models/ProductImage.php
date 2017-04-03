@@ -3,7 +3,6 @@
 namespace common\models;
 
 use Yii;
-use yii\helpers\Url;
 use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
@@ -22,7 +21,6 @@ use common\components\ImageCache;
  */
 class ProductImage extends ActiveRecord
 {
-    protected static $images = [];
     /**
      * @inheritdoc
      */
@@ -144,80 +142,11 @@ class ProductImage extends ActiveRecord
         return;
     }
 
-    public static function loadImagesFor(Product $product)
+    public function getFromCache($width = 200, $height = 200, $quality = 100, $scope = 'global')
     {
-        if (! array_key_exists($product->id, static::$images)) {
-            static::$images[ $product->id ] = static::find()
-                ->where(['product_id' => $product->id])
-                ->orderBy(['sort' => SORT_ASC])
-                ->indexBy('sort')
-                ->all();
-        }
-    }
-
-    public static function getImage(Product $product)
-    {
-        static::loadImagesFor($product);
-
-        if (! empty(static::$images[ $product->id ][1])) {
-            $image = static::$images[ $product->id ][1];
-
-            return $image->path;
-        }
-
-        return null;
-    }
-
-    public static function getImages(Product $product)
-    {
-        static::loadImagesFor($product);
-
-        $images = [];
-        foreach (static::$images[ $product->id ] as $image) {
-            $images[] = $image->path;
-        }
-        return $images;
-    }
-
-    public static function getImageFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
-    {
-        static::loadImagesFor($product);
-
-        if (! empty(static::$images[ $product->id ][1])) {
-            $image = static::$images[ $product->id ][1];
-
-            return ImageCache::create(
-                $image->path,
-                $width, $height, $quality, $scope
-            );
-        }
-
-        return null;
-    }
-
-    public static function getImagesFromCache(Product $product, $width = 200, $height = 200, $quality = 100, $scope = 'global')
-    {
-        static::loadImagesFor($product);
-
-        $images = [];
-        foreach (static::$images[ $product->id ] as $image) {
-            $images[] = ImageCache::create(
-                $image->path,
-                $width, $height, $quality, $scope
-            );
-        }
-        return $images;
-    }
-
-    public static function getImagesData(Product $product)
-    {
-        $images = [];
-        foreach (static::$images[ $product->id ] as $image) {
-            /** @var $image ProductImage */
-            $images[] = [
-                'url' => Url::to(['/product/image-delete', 'imageId' => $image->id])
-            ];
-        }
-        return $images;
+        return ImageCache::create(
+            $this->path,
+            $width, $height, $quality, $scope
+        );
     }
 }

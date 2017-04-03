@@ -7,6 +7,7 @@ use yii\base\Exception;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 use yii\behaviors\TimestampBehavior;
+use yii\helpers\Url;
 
 /**
  * This is the model class for table "product".
@@ -24,9 +25,10 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $currency_id
  * @property integer $category_id
  *
- * @property Currency $currency
- * @property Category $category
- * @property Page     $page
+ * @property Currency       $currency
+ * @property Category       $category
+ * @property Page           $page
+ * @property ProductImage[] $images
  */
 class Product extends ActiveRecord
 {
@@ -114,6 +116,16 @@ class Product extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getImages()
+    {
+        return $this->hasMany(ProductImage::className(), ['product_id' => 'id'])
+            ->orderBy(['sort' => SORT_ASC])
+            ->indexBy('sort');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getPage()
     {
         return $this->hasOne(Page::className(), ['entity_id' => 'id'])
@@ -140,6 +152,36 @@ class Product extends ActiveRecord
         }
 
         return $variation;
+    }
+
+    public function getMainImage($width = 200, $height = 200, $quality = 100, $scope = 'global')
+    {
+        if (isset($this->images[1]))
+            return $this->images[1]->getFromCache($width, $height, $quality, $scope);
+        return null;
+    }
+
+    public function getImagesForFileInput($width = 200, $height = 200, $quality = 100, $scope = 'global')
+    {
+        $images = [];
+
+        foreach ($this->images as $image) {
+            $images[] = $image->getFromCache($width, $height, $quality, $scope);
+        }
+
+        return $images;
+    }
+
+    public function getImagesDataForFileInput()
+    {
+        $images = [];
+        foreach ($this->images as $image) {
+            /** @var $image ProductImage */
+            $images[] = [
+                'url' => Url::to(['/product/image-delete', 'imageId' => $image->id])
+            ];
+        }
+        return $images;
     }
 
     public function afterSave($insert, $changedAttributes)
