@@ -19,9 +19,16 @@ class m170327_200419_create_category_table extends Migration
         }
 
         $this->createTable('{{%category}}', [
-            'id'        => $this->primaryKey(),
-            'parent_id' => $this->integer(),
-            'name'      => $this->string(45)->notNull()
+            'id'                  => $this->primaryKey(),
+            'parent_id'           => $this->integer(),
+            'name'                => $this->string(45)->notNull(),
+            'meta_title'          => $this->string(250),
+            'meta_description'    => $this->string(500),
+            'meta_keywords'       => $this->string(200),
+            'product_title'       => $this->string(250),
+            'product_description' => $this->string(500),
+            'product_keywords'    => $this->string(200),
+            'seo_text'            => $this->text()
         ], $tableOptions);
 
         $this->createIndex('idx-category-parent_id', '{{%category}}', 'parent_id');
