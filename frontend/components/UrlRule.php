@@ -10,21 +10,22 @@ use common\models\Page;
 
 class UrlRule extends Object implements UrlRuleInterface
 {
+    public $filter;
+
     public function createUrl($manager, $route, $params)
     {
         switch ($route) {
             case 'category/index':
                 return $this->createCategoryUrl($params);
-                break;
             default:
                 return '';
-                break;
         }
     }
 
     public function parseRequest($manager, $request)
     {
-        $url = $request->getUrl();
+        $url          = static::parseUrl($request->getUrl());
+        $this->filter = static::parseFilter($request->getUrl());
 
         /** @var Page $page */
         $page = Page::find()->where(['url' => $url])->one();
@@ -35,15 +36,42 @@ class UrlRule extends Object implements UrlRuleInterface
         return [
             $page->controller . '/' . 'index',
             [
-                'page' => $page,
+                'page'   => $page,
+                'filter' => $this->filter,
             ]
         ];
     }
 
+    public static function parseUrl($url)
+    {
+        if (false !== strpos($url, '/filter:')) {
+            $url    = substr($url, 0, strpos($url, '/filter:'));
+        }
+
+        return $url;
+    }
+
+    protected static function parseFilter($url)
+    {
+        if (false !== ($isFilter = strpos($url, '/filter:'))) {
+           $filter      = str_replace('/filter:', '', substr($url, $isFilter));
+           $filter      = explode(';', $filter);
+           $filterParts = [];
+
+           foreach ($filter as $item) {
+               list($name, $value) = explode('=', $item);
+               $filterParts[ $name ] = $value;
+           }
+
+           return $filterParts;
+        }
+        return null;
+    }
+
     protected function createCategoryUrl($params)
     {
-        $url = Yii::$app->request->getUrl();
         if (array_key_exists('page', $params)) {
+            $url = static::parseUrl(Yii::$app->request->getUrl());
             if ($params['page'] == 1) {
                 return $url;
             } else {
