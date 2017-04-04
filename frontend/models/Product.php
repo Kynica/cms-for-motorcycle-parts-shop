@@ -85,4 +85,37 @@ class Product extends P
 
         return $breadcrumb;
     }
+
+    public function getMetaTitle()
+    {
+        if (! empty($this->category) && ! empty($this->category->meta_title)) {
+            $vars = [
+                '{product-name}' => $this->name,
+            ];
+            return strtr($this->category->meta_title, $vars);
+        }
+        return '';
+    }
+
+    public function getMetaDescription()
+    {
+        if (! empty($this->category) && ! empty($this->category->meta_description)) {
+            $vars = [
+                '{product-name}' => $this->name,
+            ];
+            return strtr($this->category->meta_description, $vars);
+        }
+        return '';
+    }
+
+    public function getMetaKeywords()
+    {
+        if (! empty($this->category) && ! empty($this->category->meta_keywords)) {
+            $vars = [
+                '{product-name}' => str_replace(' ', ', ', $this->name),
+            ];
+            return strtr($this->category->meta_keywords, $vars);
+        }
+        return '';
+    }
 }

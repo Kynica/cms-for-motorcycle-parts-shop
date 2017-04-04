@@ -14,6 +14,13 @@ use yii\helpers\ArrayHelper;
  * @property integer $id
  * @property string  $name
  * @property integer $parent_id
+ * @property string  $meta_title
+ * @property string  $meta_description
+ * @property string  $meta_keywords
+ * @property string  $product_title
+ * @property string  $product_description
+ * @property string  $product_keywords
+ * @property string  $seo_text
  *
  * @property Category                $parent
  * @property Category[]              $parents
@@ -46,6 +53,19 @@ class Category extends ActiveRecord
         return [
             [['name'], 'required'],
             [['name'], 'string', 'max' => 45],
+            [['seo_text'], 'string'],
+            [['meta_title', 'product_title'], 'string', 'max' => 250],
+            [['meta_description', 'product_description'], 'string', 'max' => 500],
+            [['meta_keywords', 'product_keywords'], 'string', 'max' => 200],
+            [
+                [
+                    'seo_text',
+                    'meta_title',       'product_title',
+                    'meta_description', 'product_description',
+                    'meta_keywords',    'product_keywords'
+                ],
+                'default', 'value' => null
+            ],
             [['parent_id'], 'integer'],
             [['parent_id'], 'default', 'value' => null],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['parent_id' => 'id']],
@@ -58,9 +78,16 @@ class Category extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'   => Yii::t('category', 'ID'),
-            'name' => Yii::t('category', 'Name'),
-            'parent_id' => Yii::t('category', 'Parent ID'),
+            'id'                  => Yii::t('category', 'ID'),
+            'name'                => Yii::t('category', 'Name'),
+            'parent_id'           => Yii::t('category', 'Parent ID'),
+            'meta_title'          => Yii::t('category', 'Meta Title'),
+            'meta_description'    => Yii::t('category', 'Meta Description'),
+            'meta_keywords'       => Yii::t('category', 'Meta Keywords'),
+            'product_title'       => Yii::t('category', 'Product Title'),
+            'product_description' => Yii::t('category', 'Product Description'),
+            'product_keywords'    => Yii::t('category', 'Product Keywords'),
+            'seo_text'            => Yii::t('category', 'Seo Text'),
         ];
     }
 
