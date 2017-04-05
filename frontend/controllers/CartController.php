@@ -32,7 +32,8 @@ class CartController extends Controller
         $productId = (int) Yii::$app->request->post('product');
 
         if (empty($productId)) {
-            return $this->redirect(['cart/index'])->send();
+            $this->redirect(['cart/index'])->send();
+            return;
         }
 
         try {
@@ -41,17 +42,20 @@ class CartController extends Controller
             if (empty($cart))
                 $cart = Cart::create();
         } catch (Exception $e) {
-            return $this->redirect(['cart/index'])->send();
+            $this->redirect(['cart/index'])->send();
+            return;
         }
 
         try {
             $cart->addProduct($productId);
         } catch (Exception $e) {
             $cart->deleteIfEmpty();
-            return $this->redirect(['cart/index'])->send();
+            $this->redirect(['cart/index'])->send();
+            return;
         }
 
-        return $this->redirect(['cart/index'])->send();
+        $this->redirect(['cart/index'])->send();
+        return;
     }
 
     public function actionRemoveProduct()
