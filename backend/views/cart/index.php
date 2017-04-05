@@ -31,6 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getOrderStatusName();
                 }
             ],
+            [
+                'attribute' => 'Seller',
+                'content'   => function ($model) {
+                    /** @var $model Cart */
+                    return $model->getSellerName();
+                }
+            ],
             'ordered_at:date',
 
             [
