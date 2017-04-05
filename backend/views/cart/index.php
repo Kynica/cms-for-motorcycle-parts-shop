@@ -38,6 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getSellerName();
                 }
             ],
+            [
+                'attribute' => 'Total products',
+                'content'   => function ($model) {
+                    /** @var $model Cart */
+                    return $model->getTotalProduct();
+                }
+            ],
             'ordered_at:date',
 
             [
