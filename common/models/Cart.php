@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
+use backend\models\User;
 
 /**
  * This is the model class for table "cart".
@@ -21,6 +22,8 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property Product[]     $products
  * @property CartProduct[] $cartProductsData
+ * @property OrderStatus   $orderStatus
+ * @property User
  */
 class Cart extends ActiveRecord
 {
@@ -97,5 +100,34 @@ class Cart extends ActiveRecord
     {
         return $this->hasMany(CartProduct::className(), ['cart_id' => 'id'])
             ->indexBy('product_id');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrderStatus()
+    {
+        return $this->hasOne(OrderStatus::className(), ['id' => 'order_status_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSeller()
+    {
+        return $this->hasOne(User::className(), ['id' => 'seller_id']);
+    }
+
+    public function getOrderStatusName()
+    {
+        if (! empty($this->orderStatus)) {
+            return Yii::t('order-status', $this->orderStatus->name);
+        }
+        return '';
+    }
+
+    public function getSellerName()
+    {
+
     }
 }
