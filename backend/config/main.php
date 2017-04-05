@@ -67,6 +67,12 @@ return [
                 'category-product-margin' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                 ],
+                'cart' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'cart-product' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
             ],
         ],
     ],
