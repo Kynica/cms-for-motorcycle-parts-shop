@@ -6,20 +6,23 @@ use Yii;
 use yii\base\Exception;
 use yii\web\Controller;
 use frontend\models\Cart;
+use common\models\Customer;
 
 class CartController extends Controller
 {
     public function actionIndex()
     {
-        $cartKey = Yii::$app->request->cookies->getValue('cart');
-        $cart    = Cart::getByKey($cartKey);
+        $cartKey  = Yii::$app->request->cookies->getValue('cart');
+        $cart     = Cart::getByKey($cartKey);
+        $customer = new Customer();
 
         if (! empty($cartKey) && empty($cart)) {
             Yii::$app->response->cookies->remove('cart');
         }
 
         return $this->render('index', [
-            'cart' => $cart
+            'cart'     => $cart,
+            'customer' => $customer,
         ]);
     }
 
