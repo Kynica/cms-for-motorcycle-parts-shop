@@ -36,6 +36,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => \Yii::t('app', 'Home'), 'url' => ['/site/index']],
+        ['label' => \Yii::t('cart', 'Orders'), 'url' => ['/cart/index']],
         ['label' => \Yii::t('product', 'Products'), 'url' => ['/product/index']],
         ['label' => \Yii::t('category', 'Category'), 'url' => ['/category/index']],
         ['label' => \Yii::t('currency', 'Currency'), 'url' => ['/currency/index']],
