@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "customer".
@@ -30,6 +31,17 @@ class Customer extends ActiveRecord
         return '{{%customer}}';
     }
 
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => false,
+            ]
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -40,6 +52,8 @@ class Customer extends ActiveRecord
             [['created_at'], 'integer'],
             [['first_name', 'middle_name', 'last_name', 'phone_number'], 'string', 'max' => 45],
             [['email', 'password_hash', 'password_reset_token'], 'string', 'max' => 255],
+            [['email'], 'default', 'value' => null],
+            [['password_hash'], 'default', 'value' => Yii::$app->security->generateRandomString()],
         ];
     }
 
