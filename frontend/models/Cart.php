@@ -100,24 +100,6 @@ class Cart extends C
         return;
     }
 
-    public function getTotalAmount()
-    {
-        $amount      = 0;
-        /** @var CartProduct[] $cartProduct */
-        $cartProduct = CartProduct::find()
-            ->where(['cart_id' => $this->id])
-            ->indexBy('product_id')
-            ->all();
-
-        foreach ($this->products as $product) {
-            if (isset($cartProduct[ $product->id ])) {
-                $amount += (float) ($product->price * $cartProduct[ $product->id ]->quantity);
-            }
-        }
-
-        return $amount;
-    }
-
     public function getProductQuantity(Product $product)
     {
         if (isset($this->cartProductsData[ $product->id ])) {
