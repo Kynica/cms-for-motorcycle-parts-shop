@@ -34,6 +34,9 @@ class CartController extends Controller
 
         try {
             $cart = Cart::getByKey($cartKey);
+
+            if (empty($cart))
+                $cart = Cart::create();
         } catch (Exception $e) {
             return $this->redirect(['cart/index'])->send();
         }
