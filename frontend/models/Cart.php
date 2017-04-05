@@ -27,6 +27,7 @@ class Cart extends C
         if (empty($product))
             throw new Exception('Product not exist');
 
+        /** @var CartProduct $cartProduct */
         $cartProduct = CartProduct::find()
             ->where([
                 'cart_id'    => $this->id,
