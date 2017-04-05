@@ -2,12 +2,12 @@
 
 namespace frontend\models;
 
-use common\models\Customer;
 use Yii;
+use yii\web\Cookie;
 use yii\base\Exception;
 use common\models\Cart AS C;
 use common\models\CartProduct;
-use yii\web\Cookie;
+use common\models\Customer;
 
 class Cart extends C
 {
