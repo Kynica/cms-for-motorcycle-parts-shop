@@ -2,22 +2,21 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\Cart;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\CartSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this         yii\web\View
+ * @var $searchModel  backend\models\CartSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
-$this->title = Yii::t('supplier', 'Carts');
+$this->title = Yii::t('cart', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cart-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('supplier', 'Create Cart'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -25,16 +24,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'key',
-            'created_at',
-            'updated_at',
-            'is_ordered',
-            // 'ordered_at',
-            // 'customer_id',
-            // 'order_status_id',
-            // 'seller_id',
+            [
+                'attribute' => 'Order status',
+                'content'   => function ($model) {
+                    /** @var $model Cart */
+                    return $model->getOrderStatusName();
+                }
+            ],
+            'ordered_at:date',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class'    => 'yii\grid\ActionColumn',
+                'template' => '{view}'
+            ],
         ],
     ]); ?>
 </div>
