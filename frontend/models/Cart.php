@@ -48,16 +48,13 @@ class Cart extends C
         return;
     }
 
-    public static function getByKey($cartKey = null)
+    public static function getByKey($cartKey)
     {
-        if (empty($cartKey)) {
-            return static::create();
-        } else {
-            $cart = static::find()->where(['key' => $cartKey])->one();
-            if (empty($cart))
-                $cart = static::create();
-            return $cart;
+        if (! empty($cartKey)) {
+            return static::find()->where(['key' => $cartKey])->one();
         }
+
+        return null;
     }
 
     public static function create()
