@@ -12,7 +12,7 @@ class m170405_084632_add_order_id_column_to_cart_table extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn('{{%cart}}', 'order_id', $this->integer());
+        $this->addColumn('{{%cart}}', 'order_id', $this->integer()->defaultValue(null));
 
         $this->createIndex('idx-cart-order_id', '{{%cart}}', 'order_id');
 
