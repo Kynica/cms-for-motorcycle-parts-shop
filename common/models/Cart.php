@@ -13,6 +13,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string  $key
  * @property integer $created_at
  * @property integer $order_id
+ * @property integer $customer_id
  *
  * @property Product[]     $products
  * @property CartProduct[] $cartProductData
@@ -45,9 +46,11 @@ class Cart extends ActiveRecord
     {
         return [
             [['key'], 'required'],
-            [['created_at', 'updated_at', 'order_id'], 'integer'],
+            [['created_at', 'updated_at', 'order_id', 'customer_id'], 'integer'],
             [['key'], 'string', 'max' => 32],
-            [['order_id'], 'default', 'value' => null]
+            [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
+            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
+            [['order_id', 'customer_id'], 'default', 'value' => null],
         ];
     }
 
@@ -57,10 +60,11 @@ class Cart extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'         => Yii::t('cart', 'ID'),
-            'key'        => Yii::t('cart', 'Key'),
-            'created_at' => Yii::t('cart', 'Created At'),
-            'order_id'   => Yii::t('cart', 'Order id')
+            'id'          => Yii::t('cart', 'ID'),
+            'key'         => Yii::t('cart', 'Key'),
+            'created_at'  => Yii::t('cart', 'Created At'),
+            'order_id'    => Yii::t('cart', 'Order Id'),
+            'customer_id' => Yii::t('cart', 'Customer Id'),
         ];
     }
 
