@@ -121,8 +121,8 @@ class Cart extends C
 
     public function getProductQuantity(Product $product)
     {
-        if (isset($this->cartProductData[ $product->id ])) {
-            return $this->cartProductData[ $product->id ]->quantity;
+        if (isset($this->cartProductsData[ $product->id ])) {
+            return $this->cartProductsData[ $product->id ]->quantity;
         }
 
         return 0;
@@ -130,8 +130,8 @@ class Cart extends C
 
     public function getProductAmount(Product $product)
     {
-        if (isset($this->cartProductData[ $product->id ])) {
-            return (float) ($product->price * $this->cartProductData[ $product->id ]->quantity);
+        if (isset($this->cartProductsData[ $product->id ])) {
+            return (float) ($product->price * $this->cartProductsData[ $product->id ]->quantity);
         }
 
         return 0;
