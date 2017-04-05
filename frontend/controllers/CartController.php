@@ -20,6 +20,23 @@ class CartController extends Controller
             Yii::$app->response->cookies->remove('cart');
         }
 
+        if (! empty($cart) && Yii::$app->request->isPost) {
+            if ($customer->load(Yii::$app->request->post()) && $customer->validate()) {
+                $existCustomer = Customer::find()->where(['phone_number' => $customer->phone_number])->one();
+
+                if (! empty($existCustomer)) {
+                    $customer = $existCustomer;
+                } else {
+                    $customer->save();
+                }
+
+                if ($cart->turnIntoOrder($customer)) {
+                    $cart = new Cart();
+                    Yii::$app->response->cookies->remove('cart');
+                }
+            }
+        }
+
         return $this->render('index', [
             'cart'     => $cart,
             'customer' => $customer,
