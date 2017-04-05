@@ -20,7 +20,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $seller_id
  *
  * @property Product[]     $products
- * @property CartProduct[] $cartProductData
+ * @property CartProduct[] $cartProductsData
  */
 class Cart extends ActiveRecord
 {
@@ -90,7 +90,7 @@ class Cart extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCartProductData()
+    public function getCartProductsData()
     {
         return $this->hasMany(CartProduct::className(), ['cart_id' => 'id'])
             ->indexBy('product_id');
