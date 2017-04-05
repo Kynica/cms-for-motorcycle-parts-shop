@@ -1,3 +1,5 @@
 <?php
 
-return [];
+return [
+    'Checkout' => 'Оформить заказ',
+];
