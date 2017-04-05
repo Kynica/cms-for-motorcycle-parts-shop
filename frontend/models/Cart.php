@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\Customer;
 use Yii;
 use yii\base\Exception;
 use common\models\Cart AS C;
@@ -49,6 +50,10 @@ class Cart extends C
         return;
     }
 
+    /**
+     * @param  string $cartKey
+     * @return array|null|Cart
+     */
     public static function getByKey($cartKey)
     {
         if (! empty($cartKey)) {
@@ -73,6 +78,16 @@ class Cart extends C
         ]));
 
         return $cart;
+    }
+
+    public function turnIntoOrder(Customer $customer)
+    {
+        $this->is_ordered      = static::IS_ORDERED_YES;
+        $this->ordered_at      = time();
+        $this->customer_id     = $customer->id;
+        $this->order_status_id = 1; // TODO Little chit. Take new order status id.
+
+        return $this->save();
     }
 
     public function deleteIfEmpty()
