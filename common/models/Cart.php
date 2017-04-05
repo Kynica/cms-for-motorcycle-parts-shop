@@ -24,6 +24,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class Cart extends ActiveRecord
 {
+    const IS_ORDERED_YES = 'yes';
+    const IS_ORDERED_NO  = 'no';
+
     /**
      * @inheritdoc
      */
