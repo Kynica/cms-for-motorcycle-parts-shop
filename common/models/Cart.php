@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
-use backend\models\User;
+use backend\models\User AS U;
 
 /**
  * This is the model class for table "cart".
@@ -23,7 +23,7 @@ use backend\models\User;
  * @property Product[]     $products
  * @property CartProduct[] $cartProductsData
  * @property OrderStatus   $orderStatus
- * @property User
+ * @property U             $seller
  */
 class Cart extends ActiveRecord
 {
@@ -61,7 +61,7 @@ class Cart extends ActiveRecord
             [['is_ordered'], 'string'],
             [['is_ordered'], 'default', 'value' => 'no'],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['seller_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['seller_id' => 'id']],
+            [['seller_id'], 'exist', 'skipOnError' => true, 'targetClass' => U::className(), 'targetAttribute' => ['seller_id' => 'id']],
             [['order_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrderStatus::className(), 'targetAttribute' => ['order_status_id' => 'id']],
         ];
     }
@@ -115,7 +115,7 @@ class Cart extends ActiveRecord
      */
     public function getSeller()
     {
-        return $this->hasOne(User::className(), ['id' => 'seller_id']);
+        return $this->hasOne(U::className(), ['id' => 'seller_id']);
     }
 
     public function getOrderStatusName()
