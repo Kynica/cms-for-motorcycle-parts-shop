@@ -132,4 +132,14 @@ class Cart extends ActiveRecord
         }
         return '';
     }
+
+    public function getTotalProduct()
+    {
+        $total = 0;
+        foreach ($this->cartProductsData as $cartProduct) {
+            $total += $cartProduct->quantity;
+        }
+
+        return $total;
+    }
 }
