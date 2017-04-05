@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "order".
@@ -27,6 +28,15 @@ class Order extends ActiveRecord
     public static function tableName()
     {
         return '{{%order}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            'class' => TimestampBehavior::className(),
+            'createdAtAttribute' => 'created_at',
+            'updatedAtAttribute' => false,
+        ];
     }
 
     /**
