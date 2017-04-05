@@ -146,10 +146,10 @@ class Cart extends ActiveRecord
 
     public function getTotalAmount()
     {
-        $amount      = 0;
+        $amount = 0;
 
         foreach ($this->products as $product) {
-            if (isset($cartProduct[ $product->id ])) {
+            if (isset($this->cartProductsData[ $product->id ])) {
                 $amount += (float) ($product->price * $this->cartProductsData[ $product->id ]->quantity);
             }
         }
