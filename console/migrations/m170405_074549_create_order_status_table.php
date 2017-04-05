@@ -29,12 +29,13 @@ class m170405_074549_create_order_status_table extends Migration
             '{{%order_status}}',
             ['name', 'slug', 'priority'],
             [
-                ['Processing', 'processing', '1'],
-                ['Refund',     'refund',     '2'],
-                ['Shipped',    'shipped',    '3'],
-                ['Completed',  'completed',  '4'],
-                ['Canceled',   'canceled',   '5'],
-                ['Failed',     'failed',     '6'],
+                ['New',        'new',        '1'],
+                ['Processing', 'processing', '2'],
+                ['Refund',     'refund',     '3'],
+                ['Shipped',    'shipped',    '4'],
+                ['Completed',  'completed',  '5'],
+                ['Canceled',   'canceled',   '6'],
+                ['Failed',     'failed',     '7'],
             ]
         );
     }
