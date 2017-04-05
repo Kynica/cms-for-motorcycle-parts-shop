@@ -12,8 +12,12 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $id
  * @property string  $key
  * @property integer $created_at
- * @property integer $order_id
+ * @property integer $updated_at
+ * @property string  $is_ordered
+ * @property integer $ordered_at
  * @property integer $customer_id
+ * @property integer $order_status_id
+ * @property integer $seller_id
  *
  * @property Product[]     $products
  * @property CartProduct[] $cartProductData
@@ -46,11 +50,13 @@ class Cart extends ActiveRecord
     {
         return [
             [['key'], 'required'],
-            [['created_at', 'updated_at', 'order_id', 'customer_id'], 'integer'],
             [['key'], 'string', 'max' => 32],
+            [['created_at', 'updated_at', 'ordered_at', 'customer_id', 'order_status_id', 'seller_id'], 'integer'],
+            [['is_ordered'], 'string'],
+            [['is_ordered'], 'default', 'value' => 'no'],
             [['customer_id'], 'exist', 'skipOnError' => true, 'targetClass' => Customer::className(), 'targetAttribute' => ['customer_id' => 'id']],
-            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
-            [['order_id', 'customer_id'], 'default', 'value' => null],
+            [['seller_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['seller_id' => 'id']],
+            [['order_status_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrderStatus::className(), 'targetAttribute' => ['order_status_id' => 'id']],
         ];
     }
 
@@ -60,11 +66,15 @@ class Cart extends ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id'          => Yii::t('cart', 'ID'),
-            'key'         => Yii::t('cart', 'Key'),
-            'created_at'  => Yii::t('cart', 'Created At'),
-            'order_id'    => Yii::t('cart', 'Order Id'),
-            'customer_id' => Yii::t('cart', 'Customer Id'),
+            'id'              => Yii::t('customer', 'ID'),
+            'key'             => Yii::t('customer', 'Key'),
+            'created_at'      => Yii::t('customer', 'Created At'),
+            'updated_at'      => Yii::t('customer', 'Updated At'),
+            'is_ordered'      => Yii::t('customer', 'Is Ordered'),
+            'ordered_at'      => Yii::t('customer', 'Ordered At'),
+            'customer_id'     => Yii::t('customer', 'Customer ID'),
+            'order_status_id' => Yii::t('customer', 'Order Status ID'),
+            'seller_id'       => Yii::t('customer', 'Seller ID'),
         ];
     }
 
