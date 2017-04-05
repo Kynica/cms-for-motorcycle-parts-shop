@@ -45,6 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->getTotalProduct();
                 }
             ],
+            [
+                'attribute' => 'Total amount',
+                'content'   => function ($model) {
+                    /** @var $model Cart */
+                    return $model->getTotalAmount() . ' грн.';
+                }
+            ],
             'ordered_at:date',
 
             [
