@@ -8,6 +8,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-frontend',
+    'language' => 'ru',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
@@ -40,6 +41,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'cart'     => 'cart/index',
+                'cart/add' => 'cart/add-product',
                 [
                     'class' => 'frontend\components\UrlRule'
                 ]
@@ -51,6 +54,46 @@ return [
                 'baseUrl' => '@web/themes/basic',
                 'pathMap' => [
                     '@app/views' => '@app/themes/basic',
+                ],
+            ],
+        ],
+        'i18n' => [
+            'translations' => [
+                'product' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'product-image' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'currency' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'category' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'page' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'supplier' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'category-product-margin' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'cart' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'cart-product' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'order' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'order-status' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                ],
+                'customer' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
                 ],
             ],
         ],
