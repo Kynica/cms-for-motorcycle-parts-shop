@@ -20,9 +20,43 @@ $this->params['breadcrumbs'][] = $this->title;
                 'model' => $model->customer,
                 'attributes' => [
                     'first_name',
-                    'phone_number',
+                    [
+                        'label' => 'Phone number',
+                        'value' => preg_replace("/([+]{1})([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})/", "$1$2 ($3) $4-$5-$6", $model->customer->phone_number),
+                    ],
                 ]
             ]) ?>
+
+            <h3>Заказ</h3>
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    [
+                        'label' => 'Total products',
+                        'value' => $model->getTotalProduct(),
+                    ],
+                    [
+                        'label' => 'Total amount',
+                        'value' => $model->getTotalAmount(),
+                    ],
+                ]
+            ]) ?>
+
+            <h3>Действия</h3>
+            <?php if (null == $model->seller_id): ?>
+                <?= Html::a(
+                    'Обработать заказ',
+                    Url::to([
+                        'order/status',
+                        'orderId'  => $model->id,
+                        'sellerId' => Yii::$app->user->getId(),
+                        'statusId' => 1,
+                    ]),
+                    [
+                        'class' => 'btn btn-primary'
+                    ]
+                ) ?>
+            <?php endif; ?>
         </div>
 
         <div class="col-md-8">
