@@ -85,7 +85,6 @@ class Cart extends C
         $this->is_ordered      = static::IS_ORDERED_YES;
         $this->ordered_at      = time();
         $this->customer_id     = $customer->id;
-        $this->order_status_id = 1; // TODO Little chit. Take new order status id.
 
         return $this->save();
     }
