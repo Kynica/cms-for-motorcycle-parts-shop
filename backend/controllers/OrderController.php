@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\Cart;
-use backend\models\CartSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\Order;
+use backend\models\OrderSearch;
 
 /**
  * CartController implements the CRUD actions for Cart model.
  */
-class CartController extends Controller
+class OrderController extends Controller
 {
     /**
      * @inheritdoc
@@ -35,7 +35,7 @@ class CartController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CartSearch();
+        $searchModel = new OrderSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -63,7 +63,7 @@ class CartController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Cart();
+        $model = new Order();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -110,12 +110,12 @@ class CartController extends Controller
      * Finds the Cart model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Cart the loaded model
+     * @return Order the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Cart::findOne($id)) !== null) {
+        if (($model = Order::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

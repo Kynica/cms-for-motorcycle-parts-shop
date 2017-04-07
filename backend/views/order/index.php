@@ -2,11 +2,11 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use common\models\Cart;
+use backend\models\Order;
 
 /**
  * @var $this         yii\web\View
- * @var $searchModel  backend\models\CartSearch
+ * @var $searchModel  backend\models\OrderSearch
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
@@ -27,28 +27,28 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'Order status',
                 'content'   => function ($model) {
-                    /** @var $model Cart */
+                    /** @var $model Order */
                     return $model->getOrderStatusName();
                 }
             ],
             [
                 'attribute' => 'Seller',
                 'content'   => function ($model) {
-                    /** @var $model Cart */
+                    /** @var $model Order */
                     return $model->getSellerName();
                 }
             ],
             [
                 'attribute' => 'Total products',
                 'content'   => function ($model) {
-                    /** @var $model Cart */
+                    /** @var $model Order */
                     return $model->getTotalProduct();
                 }
             ],
             [
                 'attribute' => 'Total amount',
                 'content'   => function ($model) {
-                    /** @var $model Cart */
+                    /** @var $model Order */
                     return $model->getTotalAmount() . ' грн.';
                 }
             ],

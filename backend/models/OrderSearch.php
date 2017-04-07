@@ -7,13 +7,12 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\Expression;
 use yii\helpers\ArrayHelper;
-use common\models\Cart;
 use common\models\OrderStatus;
 
 /**
  * CartSearch represents the model behind the search form about `common\models\Cart`.
  */
-class CartSearch extends Cart
+class OrderSearch extends Order
 {
     /**
      * @inheritdoc
@@ -46,7 +45,7 @@ class CartSearch extends Cart
     {
         $orderStatuses = implode(',', ArrayHelper::map(OrderStatus::find()->all(), 'id', 'id'));
 
-        $query = Cart::find()
+        $query = Order::find()
             ->where([
             'is_ordered' => static::IS_ORDERED_YES
             ])->orderBy([new Expression("FIELD(cart.order_status_id, {$orderStatuses})")]);

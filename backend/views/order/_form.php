@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Cart */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $this   yii\web\View */
+/* @var $model backend\models\Order */
+/* @var $form  yii\widgets\ActiveForm */
 ?>
 
 <div class="cart-form">

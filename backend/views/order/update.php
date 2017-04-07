@@ -2,8 +2,8 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Cart */
+/* @var $this  yii\web\View */
+/* @var $model backend\models\Order */
 
 $this->title = Yii::t('supplier', 'Update {modelClass}: ', [
     'modelClass' => 'Cart',
