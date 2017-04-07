@@ -23,6 +23,7 @@ use yii\behaviors\TimestampBehavior;
  * @property CartProduct[] $cartProductsData
  * @property OrderStatus   $orderStatus
  * @property UserMethods   $seller
+ * @property Customer      $customer
  */
 class Cart extends ActiveRecord
 {
@@ -115,6 +116,14 @@ class Cart extends ActiveRecord
     public function getSeller()
     {
         return $this->hasOne(UserMethods::className(), ['id' => 'seller_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCustomer()
+    {
+        return $this->hasOne(Customer::className(), ['id' => 'customer_id']);
     }
 
     public function getOrderStatusName()
