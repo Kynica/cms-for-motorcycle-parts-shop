@@ -100,15 +100,6 @@ class Cart extends C
         return;
     }
 
-    public function getProductQuantity(Product $product)
-    {
-        if (isset($this->cartProductsData[ $product->id ])) {
-            return $this->cartProductsData[ $product->id ]->quantity;
-        }
-
-        return 0;
-    }
-
     public function getProductAmount(Product $product)
     {
         if (isset($this->cartProductsData[ $product->id ])) {
