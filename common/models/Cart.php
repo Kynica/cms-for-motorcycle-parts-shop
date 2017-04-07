@@ -131,7 +131,7 @@ class Cart extends ActiveRecord
         if (! empty($this->orderStatus)) {
             return Yii::t('order-status', $this->orderStatus->name);
         }
-        return '';
+        return Yii::t('order-status', 'New');
     }
 
     public function getSellerName()
