@@ -48,7 +48,7 @@ class OrderSearch extends Order
         $query = Order::find()
             ->where([
             'is_ordered' => static::IS_ORDERED_YES
-            ])->orderBy([new Expression("FIELD(cart.order_status_id, {$orderStatuses})")]);
+            ])->orderBy([new Expression("FIELD(cart.order_status_id, null, {$orderStatuses})")]);
 
         // add conditions that should always apply here
 
