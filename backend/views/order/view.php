@@ -56,10 +56,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'order_status_id')->dropDownList(
                 ArrayHelper::map(OrderStatus::find()->all(), 'id', 'name'),
-                ['disabled' => ! $model->statusCanByChanged()]
+                ['disabled' => ! $model->isStatusCanByChanged()]
             ) ?>
 
-            <?php if ($model->statusCanByChanged()): ?>
+            <?php if ($model->isStatusCanByChanged()): ?>
                 <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
             <?php endif; ?>
 
