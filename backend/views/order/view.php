@@ -2,10 +2,15 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
+use common\models\OrderStatus;
 
-/* @var $this  yii\web\View */
-/* @var $model backend\models\Order */
+/**
+ * @var $this  yii\web\View
+ * @var $model backend\models\Order
+ */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('cart', 'Orders'), 'url' => ['index']];
@@ -42,21 +47,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ]) ?>
 
-            <h3>Действия</h3>
-            <?php if (null == $model->seller_id): ?>
-                <?= Html::a(
-                    'Обработать заказ',
-                    Url::to([
-                        'order/status',
-                        'orderId'  => $model->id,
-                        'sellerId' => Yii::$app->user->getId(),
-                        'statusId' => 1,
-                    ]),
-                    [
-                        'class' => 'btn btn-primary'
-                    ]
-                ) ?>
+            <?php $form = ActiveForm::begin([
+                'method' => 'post',
+                'action' => ['order/change-status', 'orderId' => $model->id],
+            ]) ?>
+
+            <?= Html::input('hidden', 'orderId', $model->id); ?>
+
+            <?= $form->field($model, 'order_status_id')->dropDownList(
+                ArrayHelper::map(OrderStatus::find()->all(), 'id', 'name'),
+                ['disabled' => ! $model->statusCanByChanged()]
+            ) ?>
+
+            <?php if ($model->statusCanByChanged()): ?>
+                <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
             <?php endif; ?>
+
+            <?php ActiveForm::end() ?>
         </div>
 
         <div class="col-md-8">
