@@ -174,4 +174,13 @@ class Cart extends ActiveRecord
 
         return 0;
     }
+
+    public function getProductAmount(Product $product)
+    {
+        if (isset($this->cartProductsData[ $product->id ])) {
+            return (float) ($product->price * $this->cartProductsData[ $product->id ]->quantity);
+        }
+
+        return 0;
+    }
 }
