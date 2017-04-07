@@ -10,7 +10,7 @@ use backend\models\Order;
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
-$this->title = Yii::t('cart', 'Orders');
+$this->title = Yii::t('order', 'Orders');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cart-index">
@@ -25,28 +25,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             [
-                'attribute' => 'Order status',
+                'attribute' => Yii::t('order', 'Order Status'),
                 'content'   => function ($model) {
                     /** @var $model Order */
                     return $model->getOrderStatusName();
                 }
             ],
             [
-                'attribute' => 'Seller',
+                'attribute' => Yii::t('order', 'Seller'),
                 'content'   => function ($model) {
                     /** @var $model Order */
                     return $model->getSellerName();
                 }
             ],
             [
-                'attribute' => 'Total products',
+                'attribute' => Yii::t('order', 'Total Products'),
                 'content'   => function ($model) {
                     /** @var $model Order */
                     return $model->getTotalProduct();
                 }
             ],
             [
-                'attribute' => 'Total amount',
+                'attribute' => Yii::t('order', 'Total Amount'),
                 'content'   => function ($model) {
                     /** @var $model Order */
                     return $model->getTotalAmount() . ' грн.';

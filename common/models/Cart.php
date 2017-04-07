@@ -77,10 +77,10 @@ class Cart extends ActiveRecord
             'created_at'      => Yii::t('customer', 'Created At'),
             'updated_at'      => Yii::t('customer', 'Updated At'),
             'is_ordered'      => Yii::t('customer', 'Is Ordered'),
-            'ordered_at'      => Yii::t('customer', 'Ordered At'),
+            'ordered_at'      => Yii::t('order',    'Ordered At'),
             'customer_id'     => Yii::t('customer', 'Customer ID'),
-            'order_status_id' => Yii::t('customer', 'Order Status ID'),
-            'seller_id'       => Yii::t('customer', 'Seller ID'),
+            'order_status_id' => Yii::t('order',    'Order Status'),
+            'seller_id'       => Yii::t('order',    'Seller'),
         ];
     }
 
