@@ -28,14 +28,19 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Moto-Moto',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => \Yii::t('order', 'Orders'), 'url' => ['/order/index']],
+        ['label' => \Yii::t('product', 'Products'), 'url' => ['/product/index']],
+        ['label' => \Yii::t('category', 'Category'), 'url' => ['/category/index']],
+        ['label' => \Yii::t('currency', 'Currency'), 'url' => ['/currency/index']],
+        ['label' => \Yii::t('supplier', 'Supplier'), 'url' => ['/supplier/index']],
+        ['label' => 'Profile', 'url' => ['/profile/index']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
@@ -56,7 +61,7 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div class="container-fluid" style="margin-top: 70px">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
