@@ -8,6 +8,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\Order;
 use backend\models\OrderSearch;
+use common\models\OrderStatus;
 
 /**
  * CartController implements the CRUD actions for Cart model.
@@ -104,6 +105,17 @@ class OrderController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionChangeStatus($orderId)
+    {
+        $model  = $this->findModel($orderId);
+        $model->load(Yii::$app->request->post());
+        $model->seller_id = Yii::$app->user->getId();
+        $model->save();
+
+        $this->redirect(['order/view', 'id' => $model->id])->send();
+        return;
     }
 
     /**

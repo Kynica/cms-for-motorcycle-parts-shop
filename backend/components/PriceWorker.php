@@ -80,7 +80,7 @@ class PriceWorker
                 case '{price}':
                     $newProduct->price = str_replace(',', '.', $value);
                     break;
-                case '{purchasePrice}':
+                case '{purchase-price}':
                     $newProduct->purchase_price = str_replace(',', '.', $value);
                     break;
                 case '{stock}':

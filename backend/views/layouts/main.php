@@ -28,15 +28,14 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
+        'brandLabel' => 'Moto-Moto',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
     $menuItems = [
-        ['label' => \Yii::t('app', 'Home'), 'url' => ['/site/index']],
-        ['label' => \Yii::t('cart', 'Orders'), 'url' => ['/order/index']],
+        ['label' => \Yii::t('order', 'Orders'), 'url' => ['/order/index']],
         ['label' => \Yii::t('product', 'Products'), 'url' => ['/product/index']],
         ['label' => \Yii::t('category', 'Category'), 'url' => ['/category/index']],
         ['label' => \Yii::t('currency', 'Currency'), 'url' => ['/currency/index']],

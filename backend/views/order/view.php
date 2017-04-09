@@ -2,31 +2,72 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
+use common\models\OrderStatus;
 
-/* @var $this  yii\web\View */
-/* @var $model backend\models\Order */
+/**
+ * @var $this  yii\web\View
+ * @var $model backend\models\Order
+ */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('cart', 'Orders'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('order', 'Orders'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="cart-view">
 
     <div class="row">
         <div class="col-md-4">
-            <h3>Покупатель</h3>
+            <h3><?= Yii::t('order', 'Customer info') ?></h3>
             <?= DetailView::widget([
                 'model' => $model->customer,
                 'attributes' => [
                     'first_name',
-                    'phone_number',
+                    [
+                        'label' => Yii::t('customer', 'Phone Number'),
+                        'value' => preg_replace("/([+]{1})([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})/", "$1$2 ($3) $4-$5-$6", $model->customer->phone_number),
+                    ],
                 ]
             ]) ?>
+
+            <h3><?= Yii::t('order', 'Order info') ?></h3>
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    [
+                        'label' => Yii::t('order', 'Total Products'),
+                        'value' => $model->getTotalProduct(),
+                    ],
+                    [
+                        'label' => Yii::t('order', 'Total Amount'),
+                        'value' => $model->getTotalAmount(),
+                    ],
+                ]
+            ]) ?>
+
+            <?php $form = ActiveForm::begin([
+                'method' => 'post',
+                'action' => ['order/change-status', 'orderId' => $model->id],
+            ]) ?>
+
+            <?= Html::input('hidden', 'orderId', $model->id); ?>
+
+            <?= $form->field($model, 'order_status_id')->dropDownList(
+                ArrayHelper::map(OrderStatus::find()->all(), 'id', 'name'),
+                ['disabled' => ! $model->isStatusCanByChanged()]
+            ) ?>
+
+            <?php if ($model->isStatusCanByChanged()): ?>
+                <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => 'btn btn-primary']) ?>
+            <?php endif; ?>
+
+            <?php ActiveForm::end() ?>
         </div>
 
         <div class="col-md-8">
-            <h3>Товары в заказе</h3>
+            <h3><?= Yii::t('order', 'Products in order') ?></h3>
             <div class="row">
             <?php foreach ($model->products as $product): ?>
                 <div class="col-md-12">

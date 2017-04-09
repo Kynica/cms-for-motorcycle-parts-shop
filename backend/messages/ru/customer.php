@@ -1,3 +1,6 @@
 <?php
 
-return [];
+return [
+    'First Name'   => 'Имя',
+    'Phone Number' => 'Телефон',
+];
