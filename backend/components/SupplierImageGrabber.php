@@ -23,7 +23,7 @@ class SupplierImageGrabber
             ->all();
 
         foreach ($supplierProducts as $supplierProduct) {
-            $imageUrl = $supplier->site . 'img_big_art/'. strtolower($supplierProduct->sku) .'.jpg';
+            $imageUrl = $supplier->site . 'products/large/'. $supplierProduct->sku .'.jpg';
 
             if (Grabber::isPageExist($imageUrl)) {
                 $product   = Product::findOne($supplierProduct->product_id);

@@ -2,5 +2,6 @@
 /index-test.php
 /uploads
 assets
-skin
+_themes
+themes
 image-cache

@@ -34,3 +34,6 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+
+#other files
+composer.lock
