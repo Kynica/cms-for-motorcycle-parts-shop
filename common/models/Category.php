@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property Category[]              $parents
  * @property Category[]              $children
  * @property Category[]              $parentList
+ * @property Category[]              $directDescendants
  * @property CategoryClosure[]       $categoryClosure
  * @property Page                    $page
  * @property Product[]               $products
@@ -154,6 +155,14 @@ class Category extends ActiveRecord
                 $q->groupBy('descendant');
                 $q->orderBy('depth');
             });
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDirectDescendants()
+    {
+        return $this->hasMany(static::className(), ['parent_id' => 'id']);
     }
 
     /**
