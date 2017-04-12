@@ -259,9 +259,9 @@ class Category extends ActiveRecord
         }
 
         foreach ($currentCategories as $id => $name) {
-            $tree[ $id ] = $beforeName . $name;
+            $tree[ $id ] = $beforeName . ' ' . $name;
             if (isset($allCategories[ $id ])) {
-                static::createTree($allCategories, $allCategories[ $id ], $tree, $depth += 1);
+                static::createTree($allCategories, $allCategories[ $id ], $tree, $depth + 1);
             }
         }
 
