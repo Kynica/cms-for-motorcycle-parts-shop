@@ -11,7 +11,7 @@ use common\models\CategoryProductMargin AS CPM;
  * @var $dataProvider yii\data\ActiveDataProvider
  */
 
-$this->title = Yii::t('product', 'Categories');
+$this->title = Yii::t('category', 'Categories');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="category-index">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('product', 'Create Category'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('category', 'Create Category'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             [
-                'attribute' => 'Parents',
+                'attribute' => Yii::t('category', 'Parents'),
                 'content'   => function ($model) {
                     /** @var $model \common\models\Category */
                     return $model->getParentsNames();
@@ -38,14 +38,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'name',
             [
-                'attribute' => 'totalProducts',
+                'attribute' => Yii::t('category', 'Total Products'),
                 'content'   => function ($model) {
                     /** @var $model Category */
                     return $model->getTotalProducts();
                 }
             ],
             [
-                'attribute' => 'margin',
+                'attribute' => Yii::t('category', 'Margin'),
                 'content'   => function ($model) {
                     /** @var $model Category */
                     $content = '';
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'url',
+                'attribute' => Yii::t('category', 'url'),
                 'content'   => function ($model) {
                     /** @var $model Category */
                     return $model->page->url;
