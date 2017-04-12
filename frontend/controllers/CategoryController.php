@@ -16,7 +16,10 @@ class CategoryController extends Controller
     public function actionIndex(Page $page, array $filter)
     {
         /** @var Category $category */
-        $category = Category::find()->where(['id' => $page->entity_id])->one();
+        $category = Category::find()
+            ->where(['id' => $page->entity_id])
+            ->with(['directDescendants.page'])
+            ->one();
 
         if (empty($category))
             throw new NotFoundHttpException(Yii::t('category', 'Category not found.'));
@@ -27,6 +30,11 @@ class CategoryController extends Controller
                 'category_id',
                 $category->getIDsForProducts()
             ]);
+
+        $productQuery->with([
+            'page',
+            'images',
+        ]);
 
         $pagination = new Pagination([
             'defaultPageSize' => 20,
