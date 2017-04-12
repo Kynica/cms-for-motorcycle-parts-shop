@@ -3,13 +3,13 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use common\models\Category;
+use common\models\CategoryProductMargin AS CPM;
 
 /**
  * @var $this         yii\web\View
  * @var $searchModel  backend\models\CategorySearch
  * @var $dataProvider yii\data\ActiveDataProvider
  */
-
 
 $this->title = Yii::t('product', 'Categories');
 $this->params['breadcrumbs'][] = $this->title;
@@ -42,6 +42,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'content'   => function ($model) {
                     /** @var $model Category */
                     return $model->getTotalProducts();
+                }
+            ],
+            [
+                'attribute' => 'margin',
+                'content'   => function ($model) {
+                    /** @var $model Category */
+                    $content = '';
+
+                    foreach ($model->productMargin as $margin) {
+                        $marginSymbol = $margin->margin_type == CPM::MARGIN_TYPE_PERCENT ?
+                            '%' : $margin->currency->symbol;
+                        $content .= Html::tag(
+                            'div',
+                            $margin->currency->code . ' + ' . $margin->margin . ' ' . $marginSymbol
+                        );
+                    }
+
+                    return $content;
                 }
             ],
             [
