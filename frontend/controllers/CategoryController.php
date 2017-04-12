@@ -49,7 +49,7 @@ class CategoryController extends Controller
                 Product::STOCK_OUT .
                 '" )'
             ),
-            'created_at' => SORT_ASC
+            'created_at' => SORT_DESC
         ]);
 
         $products = $productQuery
