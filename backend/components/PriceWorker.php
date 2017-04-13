@@ -17,22 +17,23 @@ class PriceWorker
     {
         set_time_limit(0);
 
-        $path  = File::getFullPath($supplier->getPriceLink());
+        $allCategories = Category::find()->all();
+        $path          = File::getFullPath($supplier->getPriceLink());
         /** @var array $price */
-        $price = file($path);
+        $price         = file($path);
 
         $template = explode('|', str_replace("\n", '', array_shift($price)));
 
         $db = Yii::$app->db;
 
-        foreach ($price as $item) {
+        foreach ($price as $num => $item) {
             $item     = str_replace("\n", '', $item);
             $elements = explode('|', $item);
 
             $transaction = $db->beginTransaction();
 
             try {
-                $date = static::parse($supplier, $template, $elements, $category, $currency);
+                $date = static::parse($supplier, $template, $elements, $category, $currency, $allCategories);
 
                 $transaction->commit();
             } catch (Exception $e) {
@@ -40,7 +41,7 @@ class PriceWorker
                 $transaction->rollBack();
             }
 
-            echo var_dump($date);
+            echo $num . '</br>';
             flush();
         }
 
@@ -52,7 +53,8 @@ class PriceWorker
         array $template,
         array $elements,
         Category $category = null,
-        Currency $currency = null
+        Currency $currency = null,
+        array $allCategories
     ) {
         if (count($elements) == 0)
             throw new Exception('Elements array is empty');
@@ -86,6 +88,9 @@ class PriceWorker
                 case '{stock}':
                     $newProduct->stock = $value == '+' ? Product::STOCK_IN : Product::STOCK_OUT;
                     break;
+                case '{category-name}':
+                    $newProduct->category_id = static::getCategoryIdFromAll($allCategories, $value);
+                    break;
                 default:
                     throw new Exception('Unknown template selector - ' . $template[ $key ] . '.');
                     break;
@@ -97,7 +102,7 @@ class PriceWorker
         $product         = new Product();
 
         if (empty($supplierProduct)) {
-            if (! empty($category))
+            if (! empty($category) && empty($newProduct->category_id))
                 $newProduct->category_id = $category->id;
 
             if (! empty($currency))
@@ -126,7 +131,7 @@ class PriceWorker
 
             $product->setAttributes($newProduct->getAttributes());
 
-            if (! empty($category))
+            if (! empty($category) && empty($product->category_id))
                 $product->category_id = $category->id;
 
             if (! empty($currency))
@@ -145,8 +150,20 @@ class PriceWorker
         }
 
         return [
-            $product,
-            $supplierProduct
+            'product'         => $product,
+            'supplierProduct' => $supplierProduct
         ];
+    }
+
+    protected static function getCategoryIdFromAll($categories, $categoryName)
+    {
+        /** @var Category $category */
+        foreach ($categories as $category) {
+            if ($category->name == $categoryName) {
+                return $category->id;
+            }
+        }
+
+        return null;
     }
 }
