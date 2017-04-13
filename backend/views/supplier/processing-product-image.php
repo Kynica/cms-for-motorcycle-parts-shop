@@ -7,6 +7,11 @@ use backend\components\SupplierImageGrabber;
  * @var $model common\models\Supplier
  * @var $productNumber integer
  */
+
+if (ob_get_level()) {
+    ob_end_clean();
+    flush();
+}
 ?>
 
 <div class="processing-product-image">
