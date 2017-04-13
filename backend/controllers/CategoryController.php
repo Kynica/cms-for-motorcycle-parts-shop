@@ -111,6 +111,13 @@ class CategoryController extends Controller
         ]);
     }
 
+    public function actionFullTree()
+    {
+        return $this->render('full-tree', [
+            'tree' => Category::getTreeForSelect(),
+        ]);
+    }
+
     /**
      * Deletes an existing Category model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

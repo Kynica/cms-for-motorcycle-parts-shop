@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('category', 'Create Category'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('category', 'Full Tree'), ['full-tree'], ['class' => 'btn btn-default']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
