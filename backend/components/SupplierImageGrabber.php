@@ -22,6 +22,7 @@ class SupplierImageGrabber
             ->limit($productNumber)
             ->all();
 
+        $num = 0;
         foreach ($supplierProducts as $supplierProduct) {
             $imageUrl = $supplier->site . 'products/large/'. $supplierProduct->sku .'.jpg';
 
@@ -40,6 +41,9 @@ class SupplierImageGrabber
                     }
                 }
             }
+
+            echo ++$num . ', ';
+            flush();
         }
     }
 }
