@@ -29,7 +29,7 @@ use common\models\Category;
                         'allowClear' => true
                     ],
                 ]
-            ) ?>
+            )->label(Yii::t('category', 'Parent Category')) ?>
         </div>
         <div class="col-md-8">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
