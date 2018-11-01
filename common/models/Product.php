@@ -232,9 +232,7 @@ class Product extends ActiveRecord
     protected function updateSellPrice()
     {
         if (! empty($this->category_id) && ! empty($this->currency_id)) {
-            if (0.00 == $this->purchase_price) {
-                $this->sell_price = 0.00;
-            } else {
+            if (0.00 !== $this->purchase_price && 0.00 == $this->sell_price) {
                 $sellPrice = $this->category->getProductSellPrice($this, $this->currency);
                 if (! empty($sellPrice)) {
                     $this->sell_price = round($sellPrice, 2);

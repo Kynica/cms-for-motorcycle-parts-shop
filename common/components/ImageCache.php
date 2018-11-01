@@ -21,10 +21,12 @@ class ImageCache
 
         if (! file_exists($fullCachePath . '/' . $cacheImageName)) {
             $frontendPath = static::getImageFrontendPath($imagePath);
-            Image::getImagine()
-                ->open($frontendPath)
-                ->thumbnail(new Box($width, $height))
-                ->save($fullCachePath . '/' . $cacheImageName, ['quality' => $quality]);
+            if (file_exists($frontendPath)) {
+                Image::getImagine()
+                    ->open($frontendPath)
+                    ->thumbnail(new Box($width, $height))
+                    ->save($fullCachePath . '/' . $cacheImageName, ['quality' => $quality]);
+            }
         }
         return '/' . static::getCacheDir($scope, $width, $height, $quality) . '/' . $cacheImageName;
     }
