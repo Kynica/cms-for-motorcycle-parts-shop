@@ -22,7 +22,7 @@ class File extends Model
         ];
     }
 
-    public static function uploadImages($filePath, $newName = null)
+    public static function uploadImages($filePath, $imageNumber, $newName = null)
     {
         $fullPath          = Yii::getAlias('@frontend') . '/web' . $filePath;
         if (! FileHelper::createDirectory($fullPath))
@@ -36,7 +36,7 @@ class File extends Model
         if ($newFile->validate()) {
             foreach ($newFile->upload as $sort => $image) {
                 $name = empty($newName) ? $image->baseName : $newName;
-                $name = Inflector::slug($name . '-' . $sort . substr(time(), -0, 2)) . '.' . $image->extension;
+                $name = Inflector::slug($name . '-' . ++$imageNumber) . '.' . $image->extension;
 
                 if (! $image->saveAs($fullPath . '/' . $name))
                     throw new Exception('Can\'t save image "' . $name . '" to folder "' . $fullPath . '"');
