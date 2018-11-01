@@ -152,7 +152,6 @@ class Category extends ActiveRecord
         return $this->hasMany(Category::className(), ['id' => 'descendant'])
             ->viaTable(CategoryClosure::tableName(), ['ancestor' => 'id'], function ($q) {
                 /** @var $q ActiveQuery */
-                $q->groupBy('descendant');
                 $q->orderBy('depth');
             });
     }

@@ -78,7 +78,7 @@ class ProductImage extends ActiveRecord
     public static function uploadFor(Product $product)
     {
         $imageNumber = static::find()->where(['product_id' => $product->id])->count();
-        $newImages   = File::uploadImages(static::getStorageFolder(), $product->name);
+        $newImages   = File::uploadImages(static::getStorageFolder(), $imageNumber, $product->name);
 
         foreach ($newImages as $name) {
             $imageNumber += 1;
