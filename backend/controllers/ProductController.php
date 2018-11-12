@@ -10,6 +10,7 @@ use yii\web\Response;
 use backend\models\ProductSearch;
 use common\models\Product;
 use common\models\ProductImage;
+use common\models\Currency;
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -73,13 +74,15 @@ class ProductController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model        = $this->findModel($id);
+        $currencyList = Currency::find()->all();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['update', 'id' => $model->id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model'        => $model,
+                'currencyList' => $currencyList,
             ]);
         }
     }
