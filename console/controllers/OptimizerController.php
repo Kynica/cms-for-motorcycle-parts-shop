@@ -47,6 +47,6 @@ class OptimizerController extends Controller
             }
         }
 
-        $this->stdout('Done' . PHP_EOL. Console::FG_GREEN);
+        $this->stdout('Done' . PHP_EOL, Console::FG_GREEN);
     }
 }
