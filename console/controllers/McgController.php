@@ -52,8 +52,6 @@ class McgController extends Controller
                         }
 
                         $updatedProduct->save();
-                    } else {
-                        throw new \Exception('supplier product not exist');
                     }
                 }
                 $part += 1;
@@ -68,7 +66,7 @@ class McgController extends Controller
                 ' on ' .
                 $e->getFile() .
                 ' ' .
-                $e->getLine(), Console::FG_RED);
+                $e->getLine() . PHP_EOL, Console::FG_RED);
         }
     }
 }
