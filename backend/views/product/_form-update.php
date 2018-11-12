@@ -15,6 +15,7 @@ use common\models\ProductImage;
  * @var $this yii\web\View
  * @var $model common\models\Product
  * @var $form yii\widgets\ActiveForm
+ * @var Currency[] $currencyList
  */
 ?>
 
@@ -51,7 +52,10 @@ use common\models\ProductImage;
         </div>
         <div class="col-md-2">
             <?= $form->field($model, 'currency_id')->dropDownList(
-                    ArrayHelper::map(Currency::find()->all(), 'id', 'name')
+                ArrayHelper::map($currencyList, 'id', 'name'),
+                [
+                    'prompt' => 'Select currency',
+                ]
             ) ?>
         </div>
         <div class="col-md-2">
